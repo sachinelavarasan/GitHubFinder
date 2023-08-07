@@ -1,29 +1,58 @@
-import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { fetchUsers } from "./api";
+// In App.js in a new project
 
-export default function App() {
-  useEffect(() => {
-    fetchUsers("q")
-      .then((response) => {
-        console.log("response", response);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+import { useCallback } from "react";
+import { StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SearchScreen from "./src/Search";
+import { ThemeProvider } from "styled-components/native";
+import { SafeAreaView, View } from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import DetailsScreen from "./src/Details";
+import useTheme from "./utils/Hooks";
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  const [theme] = useTheme();
+  const [fontsLoaded] = useFonts({
+    "Inter-Black": require("./assets/fonts/Inter-Black.ttf"),
+    "Inter-Normal": require("./assets/fonts/Inter-Regular.ttf"),
+    "Inter-Medium": require("./assets/fonts/Inter-Medium.ttf"),
+    "Inter-Semibold": require("./assets/fonts/Inter-SemiBold.ttf"),
+    "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
+    "Inter-Extra": require("./assets/fonts/Inter-ExtraBold.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ThemeProvider theme={theme}>
+      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar />
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName="Search"
+            >
+              <Stack.Screen name="Search" component={SearchScreen} />
+              <Stack.Screen name="Details" component={DetailsScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </View>
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;
