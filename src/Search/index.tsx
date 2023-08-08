@@ -6,7 +6,7 @@ import {
   Text,
   View,
   ActivityIndicator,
-  ViewStyle,
+  VirtualizedList,
 } from "react-native";
 import { fetchUsers } from "../../api";
 import { AxiosError, AxiosResponse } from "axios";
@@ -14,6 +14,7 @@ import styled from "styled-components/native";
 
 import ArrowSvg from "../../assets/icons/arrow-move.svg";
 import useTheme from "../../utils/Hooks";
+import { isLoading } from "expo-font";
 
 const Card = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.cardBg};
@@ -30,76 +31,90 @@ const Card = styled.TouchableOpacity`
 export default function SearchScreen({ navigation }: any) {
   const [theme] = useTheme();
   const [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any>([]);
+  const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const styles = makeStyles(theme);
 
   useEffect(() => {
     setLoading(true);
-    fetchUsers("sachinela")
+    fetchUserList(page);
+  }, [page]);
+
+  const fetchUserList = (pageNumber: number) => {
+    console.log(page, items.length);
+    fetchUsers({ q: "sachin", page: pageNumber })
       .then(({ data }: AxiosResponse) => {
         setCount(data.total_count);
-        setItems(data.items);
+        setItems((state: any) => [...state, ...data.items]);
       })
       .catch((error: AxiosError) => console.log(error))
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  };
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <ActivityIndicator size="large" color={theme.subText} />
-        </View>
-      ) : (
-        <>
-          <Text style={[styles.header, { color: theme.primaryText }]}>
-            {count.toString().padStart(2, "0")} Results Found
-          </Text>
-          <ScrollView
-            style={styles.cardContainer}
-            showsVerticalScrollIndicator={false}
-          >
-            {items?.map((item: any) => {
-              return (
-                <Card
-                  key={item.node_id}
-                  style={styles.shadow}
-                  onPress={() => {
-                    /* 1. Navigate to the Details route with params */
-                    navigation.navigate("Details", {
-                      username: item?.login,
-                    });
+      <Text style={[styles.header, { color: theme.primaryText }]}>
+        {count.toString().padStart(2, "0")} Results Found
+      </Text>
+      <View></View>
+      <VirtualizedList
+        style={styles.cardContainer}
+        showsVerticalScrollIndicator={false}
+        data={items}
+        renderItem={({ item }) => {
+          return (
+            <Card
+              key={item.login}
+              style={styles.shadow}
+              onPress={() => {
+                /* 1. Navigate to the Details route with params */
+                navigation.navigate("Details", {
+                  username: item?.login,
+                });
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={styles.avatarLogo}
+                  source={{
+                    uri: item?.avatar_url,
                   }}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Image
-                      style={styles.avatarLogo}
-                      source={{
-                        uri: item?.avatar_url,
-                      }}
-                    />
-                    <View style={{ marginLeft: 14 }}>
-                      <Text style={[styles.text, { color: theme.primaryText }]}>
-                        {item.login}
-                      </Text>
-                      <Text style={[styles.subText, { color: theme.subText }]}>
-                        {item.html_url}
-                      </Text>
-                    </View>
-                  </View>
-                  <ArrowSvg />
-                </Card>
-              );
-            })}
-            <View style={{ marginBottom: 30 }}></View>
-          </ScrollView>
-        </>
-      )}
+                />
+                <View style={{ marginLeft: 14 }}>
+                  <Text style={[styles.text, { color: theme.primaryText }]}>
+                    {item.login}
+                  </Text>
+                  <Text style={[styles.subText, { color: theme.subText }]}>
+                    {item.html_url}
+                  </Text>
+                </View>
+              </View>
+              <ArrowSvg />
+            </Card>
+          );
+        }}
+        keyExtractor={(item: any) => item.node_id}
+        getItemCount={() => {
+          return items.length;
+        }}
+        getItem={(data: any, index: number) => data[index]}
+        ListFooterComponent={() => (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <ActivityIndicator size="large" color={theme.subText} />
+          </View>
+        )}
+        onEndReached={() => {
+          if (!loading) {
+            setPage((state) => state + 1);
+          }
+        }}
+        onEndReachedThreshold={1}
+      />
     </View>
   );
 }
@@ -121,7 +136,6 @@ const makeStyles = (theme: any) =>
     },
     cardContainer: {
       flex: 1,
-      paddingTop: 20,
     },
     text: {
       fontSize: 16,
@@ -147,5 +161,6 @@ const makeStyles = (theme: any) =>
       color: theme.primaryText,
       fontFamily: "Inter-Extra",
       textTransform: "capitalize",
+      paddingBottom: 20,
     },
   });
