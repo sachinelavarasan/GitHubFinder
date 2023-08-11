@@ -30,9 +30,10 @@ function formatDate(date: Date) {
   ].join(" ");
 }
 
-const Main = ({ user }: any) => {
+const Main = ({ user }: UserProps) => {
   const [theme] = useTheme();
   const styles = makeStyles(theme);
+
   return (
     <ScrollView style={styles.card} showsVerticalScrollIndicator={false}>
       <View
@@ -121,7 +122,12 @@ const Main = ({ user }: any) => {
 
 export default Main;
 
-const makeStyles = (theme: any) =>
+const makeStyles = (theme: {
+  dCard: string;
+  shadowColor: string;
+  primaryText: string;
+  subText: string;
+}) =>
   StyleSheet.create({
     card: {
       backgroundColor: theme.dCard,

@@ -54,7 +54,11 @@ const Header = ({ user }: any) => {
 
 export default Header;
 
-const makeStyles = (theme: any) =>
+const makeStyles = (theme: {
+  subText: string;
+  primaryText: string;
+  bio: string;
+}) =>
   StyleSheet.create({
     entire: {
       flexDirection: "column",

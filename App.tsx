@@ -3,7 +3,10 @@
 import { useCallback } from "react";
 import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 import SearchScreen from "./src/Search";
 import { ThemeProvider } from "styled-components/native";
 import { SafeAreaView, View } from "react-native";
@@ -12,7 +15,12 @@ import * as SplashScreen from "expo-splash-screen";
 import DetailsScreen from "./src/Details";
 import useTheme from "./utils/Hooks";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Search: undefined;
+  Details: { username: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   const [theme] = useTheme();
