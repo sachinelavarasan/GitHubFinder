@@ -1,20 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
   VirtualizedList,
+  TouchableOpacity,
 } from "react-native";
-import { fetchUsers } from "../../api";
 import { AxiosError, AxiosResponse } from "axios";
 import styled from "styled-components/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import { fetchUsers } from "../../api";
 
 import ArrowSvg from "../../assets/icons/arrow-move.svg";
+
 import useTheme from "../../utils/Hooks";
-import { isLoading } from "expo-font";
+
+import SearchBar from "../../common/SearchBar";
+
+import { RootStackParamList } from "../../App";
+
+type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
 const Card = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.cardBg};
@@ -28,34 +36,68 @@ const Card = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export default function SearchScreen({ navigation }: any) {
+export default function SearchScreen({ navigation }: Props) {
   const [theme] = useTheme();
   const [count, setCount] = useState(0);
   const [items, setItems] = useState<any>([]);
+  const [currentItems, setCurrentItems] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
+  const [searchPhrase, setSearchPhrase] = useState("");
+
   const styles = makeStyles(theme);
+  const uniqueItems = useMemo(() => {
+    return currentItems.filter((element: any) => {
+      const findId = items.find(
+        (data: any) => data.node_id === element.node_id
+      );
 
-  useEffect(() => {
+      if (!findId) {
+        return element;
+      }
+      return false;
+    });
+  }, [currentItems]);
+  const fetchUserList = (page: number, searchPhrase: string) => {
     setLoading(true);
-    fetchUserList(page);
-  }, [page]);
-
-  const fetchUserList = (pageNumber: number) => {
-    console.log(page, items.length);
-    fetchUsers({ q: "sachin", page: pageNumber })
+    fetchUsers({ q: searchPhrase, page: page })
       .then(({ data }: AxiosResponse) => {
         setCount(data.total_count);
-        setItems((state: any) => [...state, ...data.items]);
+        setCurrentItems(data.items);
       })
-      .catch((error: AxiosError) => console.log(error))
+      .catch((error: AxiosError) => {
+        console.log(error);
+      })
       .finally(() => {
         setLoading(false);
       });
   };
 
+  useEffect(() => {
+    if (page > 1) fetchUserList(page, searchPhrase);
+  }, [page]);
+
   return (
     <View style={styles.container}>
+      <View>
+        <SearchBar
+          searchPhrase={searchPhrase}
+          onChange={(e: any) => {
+            setSearchPhrase(e);
+          }}
+          onClick={(searchPhrase: string) => {
+            setPage(1);
+            setItems([]);
+            fetchUserList(1, searchPhrase);
+          }}
+          onClose={() => {
+            setSearchPhrase("");
+            setItems([]);
+            setPage(1);
+            setCount(0);
+          }}
+        />
+      </View>
       <Text style={[styles.header, { color: theme.primaryText }]}>
         {count.toString().padStart(2, "0")} Results Found
       </Text>
@@ -63,7 +105,7 @@ export default function SearchScreen({ navigation }: any) {
       <VirtualizedList
         style={styles.cardContainer}
         showsVerticalScrollIndicator={false}
-        data={items}
+        data={uniqueItems}
         renderItem={({ item }) => {
           return (
             <Card
@@ -98,22 +140,74 @@ export default function SearchScreen({ navigation }: any) {
         }}
         keyExtractor={(item: any) => item.node_id}
         getItemCount={() => {
-          return items.length;
+          return uniqueItems.length;
         }}
         getItem={(data: any, index: number) => data[index]}
-        ListFooterComponent={() => (
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <ActivityIndicator size="large" color={theme.subText} />
-          </View>
-        )}
-        onEndReached={() => {
-          if (!loading) {
-            setPage((state) => state + 1);
-          }
-        }}
-        onEndReachedThreshold={1}
+        ListFooterComponent={
+          loading ? (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator size="large" color={theme.subText} />
+            </View>
+          ) : uniqueItems.length ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  if (!loading) {
+                    setPage((state) => state + 1);
+                  }
+                }}
+                style={{
+                  borderColor: theme.subText,
+                  borderWidth: 1,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 7,
+                  backgroundColor: theme.subText,
+                  opacity: 0.8,
+                  borderRadius: 5,
+                  paddingHorizontal: 15,
+                  paddingBottom: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    textAlignVertical: "center",
+                    fontSize: 14,
+                  }}
+                >
+                  Load More
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null
+        }
+        // onEndReached={() => {
+        //   console.log("enddd");
+        //   if (!loading) {
+        //     setPage((state) => state + 1);
+        //   }
+        // }}
+        // onEndReachedThreshold={1}
+        // onTouchMove={}
+
+        // onTouchMove={() => {
+        //   console.log("enddd");
+
+        // }}
       />
     </View>
   );
@@ -162,5 +256,6 @@ const makeStyles = (theme: any) =>
       fontFamily: "Inter-Extra",
       textTransform: "capitalize",
       paddingBottom: 20,
+      marginTop: 20,
     },
   });

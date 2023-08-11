@@ -16,6 +16,10 @@ import { AxiosResponse } from "axios";
 import Back from "../../assets/icons/back.svg";
 import { NavigationProp } from "@react-navigation/native";
 import useTheme from "../../utils/Hooks";
+import { RootStackParamList } from "../../App";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type Props = NativeStackScreenProps<RootStackParamList, "Details">;
 
 const Card = styled.View`
   background-color: ${(props) => props.theme.cardBg};
@@ -29,7 +33,7 @@ const Card = styled.View`
   align-items: center;
 `;
 
-export default function DetailsScreen({ route, navigation }: any) {
+export default function DetailsScreen({ route, navigation }: Props) {
   const { username } = route.params;
   const [theme] = useTheme();
   const [user, setUser] = useState(null);
@@ -54,7 +58,7 @@ export default function DetailsScreen({ route, navigation }: any) {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <ActivityIndicator size="large" color={darkTheme.subText} />
+          <ActivityIndicator size="large" color={theme.subText} />
         </View>
       ) : (
         <>
@@ -72,13 +76,13 @@ export default function DetailsScreen({ route, navigation }: any) {
             <Text style={styles.back}>Back</Text>
           </TouchableOpacity>
           <Header user={user} />
-          <Main user={user} />
+          {user ? <Main user={user} /> : null}
         </>
       )}
     </View>
   );
 }
-const makeStyles = (theme: any) =>
+const makeStyles = (theme: { bg: string; back: string }) =>
   StyleSheet.create({
     container: {
       flex: 1,
