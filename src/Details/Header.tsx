@@ -14,7 +14,7 @@ const Header = ({ user }: any) => {
     <View style={styles.entire}>
       <View style={[styles.top]}>
         <View style={styles.headerContainer}>
-          <Text style={styles.head}>{user?.name}</Text>
+          {user?.name ? <Text style={styles.head}>{user?.name}</Text> : null}
           <View
             style={{
               flexDirection: "row",
@@ -25,15 +25,17 @@ const Header = ({ user }: any) => {
             <Github style={{ marginRight: 12 }} />
             <Text style={styles.sub}>{user?.url}</Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Web style={{ marginRight: 12 }} />
-            <Text style={styles.sub}>{user?.blog}</Text>
-          </View>
+          {user?.blog ? (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Web style={{ marginRight: 12 }} />
+              <Text style={styles.sub}>{user?.blog}</Text>
+            </View>
+          ) : null}
         </View>
         <View>
           <Image
@@ -44,10 +46,12 @@ const Header = ({ user }: any) => {
           />
         </View>
       </View>
-      <View style={{ flexDirection: "column", marginVertical: 20 }}>
-        <Text style={styles.bio}>BIO</Text>
-        <Text style={styles.bioText}>{user?.bio}</Text>
-      </View>
+      {user?.bio ? (
+        <View style={{ flexDirection: "column", marginTop: 20 }}>
+          <Text style={styles.bio}>BIO</Text>
+          <Text style={styles.bioText}>{user?.bio}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };

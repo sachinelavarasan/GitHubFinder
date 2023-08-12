@@ -1,5 +1,5 @@
 import axios from "axios";
-const EXPO_PUBLIC_GIT_TOKEN = "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";
+import { EXPO_PUBLIC_GIT_TOKEN } from "@env";
 
 export const instance = axios.create({
   baseURL: "https://api.github.com/",

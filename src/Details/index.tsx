@@ -21,18 +21,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Details">;
 
-const Card = styled.View`
-  background-color: ${(props) => props.theme.cardBg};
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.cardBg};
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 export default function DetailsScreen({ route, navigation }: Props) {
   const { username } = route.params;
   const [theme] = useTheme();

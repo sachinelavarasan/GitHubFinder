@@ -137,6 +137,7 @@ const makeStyles = (theme: {
       shadowOpacity: 0.3,
       shadowRadius: 2,
       elevation: 4,
+      marginTop: 20,
     },
     col: {
       width: windowDimensions / 2,

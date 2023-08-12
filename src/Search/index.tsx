@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   VirtualizedList,
   TouchableOpacity,
+  Switch,
 } from "react-native";
 import { AxiosError, AxiosResponse } from "axios";
 import styled from "styled-components/native";
@@ -24,20 +25,8 @@ import { RootStackParamList } from "../../App";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
-const Card = styled.TouchableOpacity`
-  background-color: ${(props) => props.theme.cardBg};
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.cardBg};
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 export default function SearchScreen({ navigation }: Props) {
-  const [theme] = useTheme();
+  const [theme, isDark, setThemes] = useTheme();
   const [count, setCount] = useState(0);
   const [items, setItems] = useState<any>([]);
   const [currentItems, setCurrentItems] = useState<any>([]);
@@ -59,18 +48,20 @@ export default function SearchScreen({ navigation }: Props) {
     });
   }, [currentItems]);
   const fetchUserList = (page: number, searchPhrase: string) => {
-    setLoading(true);
-    fetchUsers({ q: searchPhrase, page: page })
-      .then(({ data }: AxiosResponse) => {
-        setCount(data.total_count);
-        setCurrentItems(data.items);
-      })
-      .catch((error: AxiosError) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (searchPhrase.trim().length) {
+      setLoading(true);
+      fetchUsers({ q: searchPhrase.trim(), page: page })
+        .then(({ data }: AxiosResponse) => {
+          setCount(data.total_count);
+          setCurrentItems(data.items);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error.response?.data);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
@@ -79,6 +70,34 @@ export default function SearchScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignSelf: "flex-end",
+          backgroundColor: theme.cardBg,
+          alignItems: "center",
+          justifyContent: "center",
+          paddingHorizontal: 20,
+          marginBottom: 10,
+          borderRadius: 10,
+        }}
+      >
+        <Text
+          style={[
+            styles.header,
+            { color: theme.primaryText, paddingBottom: 0, marginTop: 0 },
+          ]}
+        >
+          Theme
+        </Text>
+        <Switch
+          trackColor={{ false: "#000", true: "#fff" }}
+          thumbColor={isDark ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={() => setThemes(!isDark)}
+          value={isDark}
+        />
+      </View>
       <View>
         <SearchBar
           searchPhrase={searchPhrase}
@@ -108,9 +127,9 @@ export default function SearchScreen({ navigation }: Props) {
         data={uniqueItems}
         renderItem={({ item }) => {
           return (
-            <Card
+            <TouchableOpacity
               key={item.login}
-              style={styles.shadow}
+              style={[styles.card, styles.shadow]}
               onPress={() => {
                 /* 1. Navigate to the Details route with params */
                 navigation.navigate("Details", {
@@ -135,7 +154,7 @@ export default function SearchScreen({ navigation }: Props) {
                 </View>
               </View>
               <ArrowSvg />
-            </Card>
+            </TouchableOpacity>
           );
         }}
         keyExtractor={(item: any) => item.node_id}
@@ -154,7 +173,7 @@ export default function SearchScreen({ navigation }: Props) {
             >
               <ActivityIndicator size="large" color={theme.subText} />
             </View>
-          ) : uniqueItems.length ? (
+          ) : uniqueItems.length && count - page * 30 > 0 ? (
             <View
               style={{
                 flexDirection: "row",
@@ -237,6 +256,17 @@ const makeStyles = (theme: any) =>
       color: theme.primaryText,
       fontFamily: "Inter-Bold",
       textTransform: "capitalize",
+    },
+    card: {
+      backgroundColor: theme.cardBg,
+      padding: 12,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: theme.cardBg,
+      marginBottom: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
     },
     shadow: {
       shadowColor: theme.shadowColor,
