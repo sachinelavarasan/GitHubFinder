@@ -4,9 +4,10 @@ import { darkTheme, lightTheme } from "../utils/colors";
 
 export default function useTheme() {
   const [theme, setTheme] = useState<any>(darkTheme);
+  const [isDark, setIsDark] = useState<boolean>(true);
   const getTheme = async () => {
     try {
-      const value = await AsyncStorage.getItem("theme");
+      let value = await AsyncStorage.getItem("theme");
       if (value !== null) {
         switch (value) {
           case "dark":
@@ -21,8 +22,22 @@ export default function useTheme() {
       console.log(e);
     }
   };
+  const setThemes = async (isDark: boolean) => {
+    try {
+      if (isDark) {
+        await AsyncStorage.setItem("theme", "dark");
+        setIsDark(true);
+      } else {
+        await AsyncStorage.setItem("theme", "light");
+        setIsDark(false);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     getTheme();
-  }, []);
-  return [theme];
+  }, [isDark]);
+
+  return [theme, isDark, setThemes];
 }

@@ -1,6 +1,6 @@
 // In App.js in a new project
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -8,7 +8,6 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import SearchScreen from "./src/Search";
-import { ThemeProvider } from "styled-components/native";
 import { SafeAreaView, View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -23,7 +22,6 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
-  const [theme] = useTheme();
   const [fontsLoaded] = useFonts({
     "Inter-Black": require("./assets/fonts/Inter-Black.ttf"),
     "Inter-Normal": require("./assets/fonts/Inter-Regular.ttf"),
@@ -42,24 +40,21 @@ function App() {
   if (!fontsLoaded) {
     return null;
   }
-
   return (
-    <ThemeProvider theme={theme}>
-      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <StatusBar />
-          <NavigationContainer>
-            <Stack.Navigator
-              screenOptions={{ headerShown: false }}
-              initialRouteName="Search"
-            >
-              <Stack.Screen name="Search" component={SearchScreen} />
-              <Stack.Screen name="Details" component={DetailsScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-      </View>
-    </ThemeProvider>
+    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName="Search"
+          >
+            <Stack.Screen name="Search" component={SearchScreen} />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </View>
   );
 }
 
