@@ -1,6 +1,6 @@
 // SearchBar.js
 import React, { useState } from "react";
-import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
+import { StyleSheet, TextInput, View, Keyboard } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 
 interface Props {
@@ -34,6 +34,11 @@ const SearchBar = ({ searchPhrase, onChange, onClick, onClose }: Props) => {
           onChangeText={onChange}
           onFocus={() => {
             setIsClicked(true);
+          }}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+            onClick(searchPhrase);
+            setIsClicked(false);
           }}
         />
 
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "#d3d3d3",
+    backgroundColor: "#fff",
     borderRadius: 15,
     alignItems: "center",
   },
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#fff",
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "space-evenly",
