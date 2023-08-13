@@ -12,9 +12,11 @@ export default function useTheme() {
         switch (value) {
           case "dark":
             setTheme(darkTheme);
+            setIsDark(true);
             break;
           case "light":
             setTheme(lightTheme);
+            setIsDark(false);
             break;
         }
       }

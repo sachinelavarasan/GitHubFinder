@@ -68,6 +68,8 @@ export default function SearchScreen({ navigation }: Props) {
     if (page > 1) fetchUserList(page, searchPhrase);
   }, [page]);
 
+  console.log(isDark, theme);
+
   return (
     <View style={styles.container}>
       <View
