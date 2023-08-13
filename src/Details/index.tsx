@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,27 +6,29 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { NavigationProp } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AxiosResponse } from "axios";
 
-import styled from "styled-components/native";
-import { darkTheme, lightTheme } from "../../utils/colors";
+import { fetchUser } from "../../api";
 import Header from "./Header";
 import Main from "./Main";
-import { fetchUser } from "../../api";
-import { AxiosResponse } from "axios";
-import Back from "../../assets/icons/back.svg";
-import { NavigationProp } from "@react-navigation/native";
-import useTheme from "../../utils/Hooks";
 import { RootStackParamList } from "../../App";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { colors } from "../../utils/colors";
+import { ThemeContext } from "../../contexts/ThemeProvider";
+import Back from "../../assets/icons/back.svg";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Details">;
 
 export default function DetailsScreen({ route, navigation }: Props) {
   const { username } = route.params;
-  const [theme] = useTheme();
+
+  const { theme } = useContext(ThemeContext);
+  const activeColors = colors[theme.mode];
+  const styles = makeStyles(activeColors);
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const styles = makeStyles(theme);
 
   useEffect(() => {
     setLoading(true);

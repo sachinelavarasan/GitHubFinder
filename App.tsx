@@ -1,18 +1,15 @@
 // In App.js in a new project
-
-import { useCallback, useMemo } from "react";
-import { StatusBar } from "react-native";
+import { useCallback, useState, useEffect } from "react";
+import { SafeAreaView, View, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  NativeStackScreenProps,
-  createNativeStackNavigator,
-} from "@react-navigation/native-stack";
-import SearchScreen from "./src/Search";
-import { SafeAreaView, View } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+
+import SearchScreen from "./src/Search";
 import DetailsScreen from "./src/Details";
-import useTheme from "./utils/Hooks";
+import { ThemeContext } from "./contexts/ThemeProvider";
+import { getData, storeData } from "./utils/asyncStorage";
 
 export type RootStackParamList = {
   Search: undefined;
@@ -22,6 +19,8 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
+  const [theme, setTheme] = useState({ mode: "dark" });
+
   const [fontsLoaded] = useFonts({
     "Inter-Black": require("./assets/fonts/Inter-Black.ttf"),
     "Inter-Normal": require("./assets/fonts/Inter-Regular.ttf"),
@@ -31,30 +30,58 @@ function App() {
     "Inter-Extra": require("./assets/fonts/Inter-ExtraBold.ttf"),
   });
 
+  const updateTheme = (newTheme: any) => {
+    let mode;
+    if (!newTheme) {
+      mode = theme.mode === "dark" ? "light" : "dark";
+      newTheme = { mode };
+    }
+    setTheme(newTheme);
+    storeData("appTheme", newTheme);
+  };
+
+  const fetchSelectedTheme = async () => {
+    try {
+      let seletedTheme = await getData("appTheme");
+      if (seletedTheme) {
+        updateTheme(seletedTheme);
+      }
+    } catch ({ message }: any) {
+      alert(message);
+    }
+  };
+
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
+  useEffect(() => {
+    fetchSelectedTheme();
+  }, []);
+
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar />
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName="Search"
-          >
-            <Stack.Screen name="Search" component={SearchScreen} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
-    </View>
+    <ThemeContext.Provider value={{ theme, updateTheme }}>
+      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar />
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName="Search"
+            >
+              <Stack.Screen name="Search" component={SearchScreen} />
+              <Stack.Screen name="Details" component={DetailsScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </View>
+    </ThemeContext.Provider>
   );
 }
 
