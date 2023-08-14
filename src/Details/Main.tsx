@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
-import React from "react";
-import useTheme from "../../utils/Hooks";
+import { useContext } from "react";
+
+import { ThemeContext } from "../../contexts/ThemeProvider";
+import { colors } from "../../utils/colors";
 
 const windowDimensions = Dimensions.get("window").width - 40;
 
@@ -31,8 +33,9 @@ function formatDate(date: Date) {
 }
 
 const Main = ({ user }: UserProps) => {
-  const [theme] = useTheme();
-  const styles = makeStyles(theme);
+  const { theme } = useContext(ThemeContext);
+  const activeColors = colors[theme.mode];
+  const styles = makeStyles(activeColors);
 
   return (
     <ScrollView style={styles.card} showsVerticalScrollIndicator={false}>

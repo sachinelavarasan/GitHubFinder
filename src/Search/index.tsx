@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useContext } from "react";
 import {
   Image,
   StyleSheet,
@@ -10,23 +10,22 @@ import {
   Switch,
 } from "react-native";
 import { AxiosError, AxiosResponse } from "axios";
-import styled from "styled-components/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { fetchUsers } from "../../api";
-
-import ArrowSvg from "../../assets/icons/arrow-move.svg";
-
-import useTheme from "../../utils/Hooks";
-
 import SearchBar from "../../common/SearchBar";
-
 import { RootStackParamList } from "../../App";
+import { ThemeContext } from "../../contexts/ThemeProvider";
+import { colors } from "../../utils/colors";
+import ArrowSvg from "../../assets/icons/arrow-move.svg";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
 export default function SearchScreen({ navigation }: Props) {
-  const [theme, isDark, setThemes] = useTheme();
+  const { theme, updateTheme } = useContext(ThemeContext);
+  const activeColors = colors[theme.mode];
+  const styles = makeStyles(activeColors);
+
   const [count, setCount] = useState(0);
   const [items, setItems] = useState<any>([]);
   const [currentItems, setCurrentItems] = useState<any>([]);
@@ -34,7 +33,6 @@ export default function SearchScreen({ navigation }: Props) {
   const [loading, setLoading] = useState(false);
   const [searchPhrase, setSearchPhrase] = useState("");
 
-  const styles = makeStyles(theme);
   const uniqueItems = useMemo(() => {
     return currentItems.filter((element: any) => {
       const findId = items.find(
@@ -47,6 +45,7 @@ export default function SearchScreen({ navigation }: Props) {
       return false;
     });
   }, [currentItems]);
+
   const fetchUserList = (page: number, searchPhrase: string) => {
     if (searchPhrase.trim().length) {
       setLoading(true);
@@ -74,7 +73,7 @@ export default function SearchScreen({ navigation }: Props) {
         style={{
           flexDirection: "row",
           alignSelf: "flex-end",
-          backgroundColor: theme.cardBg,
+          backgroundColor: activeColors.cardBg,
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 20,
@@ -85,17 +84,19 @@ export default function SearchScreen({ navigation }: Props) {
         <Text
           style={[
             styles.header,
-            { color: theme.primaryText, paddingBottom: 0, marginTop: 0 },
+            { color: activeColors.primaryText, paddingBottom: 0, marginTop: 0 },
           ]}
         >
           Theme
         </Text>
         <Switch
           trackColor={{ false: "#000", true: "#fff" }}
-          thumbColor={isDark ? "#f5dd4b" : "#f4f3f4"}
+          thumbColor={theme.mode === "dark" ? "#f5dd4b" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={() => setThemes(!isDark)}
-          value={isDark}
+          onValueChange={() => {
+            updateTheme();
+          }}
+          value={theme.mode === "dark"}
         />
       </View>
       <View>
@@ -117,7 +118,7 @@ export default function SearchScreen({ navigation }: Props) {
           }}
         />
       </View>
-      <Text style={[styles.header, { color: theme.primaryText }]}>
+      <Text style={[styles.header, { color: activeColors.primaryText }]}>
         {count.toString().padStart(2, "0")} Results Found
       </Text>
       <View></View>
@@ -145,10 +146,14 @@ export default function SearchScreen({ navigation }: Props) {
                   }}
                 />
                 <View style={{ marginLeft: 14 }}>
-                  <Text style={[styles.text, { color: theme.primaryText }]}>
+                  <Text
+                    style={[styles.text, { color: activeColors.primaryText }]}
+                  >
                     {item.login}
                   </Text>
-                  <Text style={[styles.subText, { color: theme.subText }]}>
+                  <Text
+                    style={[styles.subText, { color: activeColors.subText }]}
+                  >
                     {item.html_url}
                   </Text>
                 </View>
@@ -171,7 +176,7 @@ export default function SearchScreen({ navigation }: Props) {
                 justifyContent: "center",
               }}
             >
-              <ActivityIndicator size="large" color={theme.subText} />
+              <ActivityIndicator size="large" color={activeColors.subText} />
             </View>
           ) : uniqueItems.length && count - page * 30 > 0 ? (
             <View
@@ -188,13 +193,13 @@ export default function SearchScreen({ navigation }: Props) {
                   }
                 }}
                 style={{
-                  borderColor: theme.subText,
+                  borderColor: activeColors.subText,
                   borderWidth: 1,
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: 7,
-                  backgroundColor: theme.subText,
+                  backgroundColor: activeColors.subText,
                   opacity: 0.8,
                   borderRadius: 5,
                   paddingHorizontal: 15,

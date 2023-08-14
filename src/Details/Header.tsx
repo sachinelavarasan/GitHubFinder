@@ -1,15 +1,18 @@
+import { useContext } from "react";
 import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
-import React from "react";
-import { darkTheme } from "../../utils/colors";
+
+import { colors } from "../../utils/colors";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 import Github from "../../assets/icons/github.svg";
 import Web from "../../assets/icons/web.svg";
-import useTheme from "../../utils/Hooks";
 
 const windowDimensions = Dimensions.get("window").width;
 
 const Header = ({ user }: any) => {
-  const [theme] = useTheme();
-  const styles = makeStyles(theme);
+  const { theme } = useContext(ThemeContext);
+  const activeColors = colors[theme.mode];
+  const styles = makeStyles(activeColors);
+
   return (
     <View style={styles.entire}>
       <View style={[styles.top]}>
