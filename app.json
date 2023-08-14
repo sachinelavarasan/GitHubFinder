@@ -7,23 +7,21 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-250.png",
+      "image": "./assets/splash-app-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/splash-icon.png"
+      "icon": "./assets/app-icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splash-icon.png",
+        "foregroundImage": "./assets/app-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "icon": "./assets/splash-icon.png",
+      "icon": "./assets/app-icon.png",
       "package": "com.elavarasan321.GitHubFinder"
     },
     "web": {

@@ -17,7 +17,12 @@ import SearchBar from "../../common/SearchBar";
 import { RootStackParamList } from "../../App";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { colors } from "../../utils/colors";
+
 import ArrowSvg from "../../assets/icons/arrow-move.svg";
+import DarkThemeIcon from "../../assets/theme/moon.svg";
+import LightThemeIcon from "../../assets/theme/sun.svg";
+import DarkThemeLogo from "../../assets/logo/dark-logo.svg";
+import LightThemeLogo from "../../assets/logo/light-logo.svg";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
@@ -72,32 +77,34 @@ export default function SearchScreen({ navigation }: Props) {
       <View
         style={{
           flexDirection: "row",
-          alignSelf: "flex-end",
-          backgroundColor: activeColors.cardBg,
           alignItems: "center",
-          justifyContent: "center",
-          paddingHorizontal: 20,
+          justifyContent: "space-between",
+          paddingHorizontal: 5,
           marginBottom: 10,
-          borderRadius: 10,
         }}
       >
-        <Text
-          style={[
-            styles.header,
-            { color: activeColors.primaryText, paddingBottom: 0, marginTop: 0 },
-          ]}
-        >
-          Theme
-        </Text>
-        <Switch
-          trackColor={{ false: "#000", true: "#fff" }}
-          thumbColor={theme.mode === "dark" ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => {
-            updateTheme();
+        <View style={{ marginRight: 4 }}>
+          {theme.mode === "dark" ? <DarkThemeLogo /> : <LightThemeLogo />}
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
           }}
-          value={theme.mode === "dark"}
-        />
+        >
+          <View style={{ marginRight: 4 }}>
+            {theme.mode === "dark" ? <DarkThemeIcon /> : <LightThemeIcon />}
+          </View>
+          <Switch
+            trackColor={{ false: "#000", true: "#fff" }}
+            thumbColor={theme.mode === "dark" ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => {
+              updateTheme();
+            }}
+            value={theme.mode === "dark"}
+          />
+        </View>
       </View>
       <View>
         <SearchBar
@@ -119,7 +126,11 @@ export default function SearchScreen({ navigation }: Props) {
         />
       </View>
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
-        {count.toString().padStart(2, "0")} Results Found
+        {count > 0
+          ? `${count.toString().padStart(2)} user found`
+          : searchPhrase.trim()
+          ? "No result found"
+          : ""}
       </Text>
       <View></View>
       <VirtualizedList
@@ -286,7 +297,7 @@ const makeStyles = (theme: any) =>
       fontFamily: "Inter-Normal",
     },
     header: {
-      fontSize: 18,
+      fontSize: 14,
       color: theme.primaryText,
       fontFamily: "Inter-Extra",
       textTransform: "capitalize",
