@@ -38,88 +38,90 @@ const Main = ({ user }: UserProps) => {
   const styles = makeStyles(activeColors);
 
   return (
-    <ScrollView style={styles.card} showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Login</Text>
-        <Text style={styles.cell}>{user?.login}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Account Created</Text>
-        <Text style={styles.cell}>
-          {formatDate(new Date(user?.created_at)) || "-"}
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Location</Text>
-        <Text style={styles.cell}>{user?.location || "-"}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Follower’s</Text>
-        <Text style={styles.cell}>{user?.followers || "-"}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Following’s</Text>
-        <Text style={styles.cell}>{user?.following || "-"}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Company Name</Text>
-        <Text style={styles.cell}>{user?.company || "-"}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          borderBottomColor: theme.bCard,
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={styles.col}>Type</Text>
-        <Text style={styles.cell}>{user?.type || "-"}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-        }}
-      >
-        <Text style={styles.col}>Public Repo’</Text>
-        <Text style={styles.cell}>{user?.public_repos || "-"}</Text>
-      </View>
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.card} showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Login</Text>
+          <Text style={styles.cell}>{user?.login}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Account Created</Text>
+          <Text style={styles.cell}>
+            {formatDate(new Date(user?.created_at)) || "-"}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Location</Text>
+          <Text style={styles.cell}>{user?.location || "-"}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Follower’s</Text>
+          <Text style={styles.cell}>{user?.followers || "-"}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Following’s</Text>
+          <Text style={styles.cell}>{user?.following || "-"}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Company Name</Text>
+          <Text style={styles.cell}>{user?.company || "-"}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomColor: activeColors.bCard,
+            borderBottomWidth: 1,
+          }}
+        >
+          <Text style={styles.col}>Type</Text>
+          <Text style={styles.cell}>{user?.type || "-"}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <Text style={styles.col}>Public Repo’</Text>
+          <Text style={styles.cell}>{user?.public_repos || "-"}</Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

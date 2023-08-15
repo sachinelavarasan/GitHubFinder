@@ -1,60 +1,128 @@
-import { useContext } from "react";
-import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
+import { useContext, useCallback } from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Pressable,
+  TouchableOpacity,
+  Linking,
+  Alert,
+} from "react-native";
 
 import { colors } from "../../utils/colors";
+import BackLight from "../../assets/icons/back-light.svg";
+import BackDark from "../../assets/icons/back-dark.svg";
 import { ThemeContext } from "../../contexts/ThemeProvider";
-import Github from "../../assets/icons/github.svg";
-import Web from "../../assets/icons/web.svg";
+import GithubDark from "../../assets/icons/github-dark.svg";
+import GithubLight from "../../assets/icons/github-light.svg";
+import WebDark from "../../assets/icons/web-dark.svg";
+import WebLight from "../../assets/icons/web-light.svg";
+import { useNavigation } from "@react-navigation/native";
 
-const windowDimensions = Dimensions.get("window").width;
+const windowDimensions = Dimensions.get("window").width - 40;
 
 const Header = ({ user }: any) => {
+  const navigation = useNavigation();
   const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
 
+  const handlePress = useCallback(
+    async (url: string) => {
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert(`Don't know how to open this URL: ${url}`);
+      }
+    },
+    [user]
+  );
+
   return (
-    <View style={styles.entire}>
-      <View style={[styles.top]}>
-        <View style={styles.headerContainer}>
+    <View style={{ flex: 1, width: windowDimensions }}>
+      <View style={styles.headerContainer}>
+        <View style={{ width: windowDimensions / 2 }}>
           {user?.name ? <Text style={styles.head}>{user?.name}</Text> : null}
-          <View
-            style={{
-              flexDirection: "row",
-              marginBottom: 4,
-              alignItems: "center",
-            }}
-          >
-            <Github style={{ marginRight: 12 }} />
-            <Text style={styles.sub}>{user?.url}</Text>
-          </View>
           {user?.blog ? (
-            <View
+            <TouchableOpacity
               style={{
                 flexDirection: "row",
+                marginBottom: 4,
                 alignItems: "center",
               }}
+              onPress={() => {
+                handlePress(user?.blog);
+              }}
             >
-              <Web style={{ marginRight: 12 }} />
+              {theme.mode === "dark" ? (
+                <WebDark style={{ marginRight: 12 }} />
+              ) : (
+                <WebLight style={{ marginRight: 12 }} />
+              )}
+
               <Text style={styles.sub}>{user?.blog}</Text>
-            </View>
+            </TouchableOpacity>
+          ) : null}
+          {user?.html_url ? (
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                marginVertical: 4,
+                alignItems: "center",
+              }}
+              onPress={() => {
+                handlePress(user?.html_url);
+              }}
+            >
+              {theme.mode === "dark" ? (
+                <GithubDark style={{ marginRight: 12 }} />
+              ) : (
+                <GithubLight style={{ marginRight: 12 }} />
+              )}
+
+              <Text style={styles.sub}>{user?.html_url}</Text>
+            </TouchableOpacity>
           ) : null}
         </View>
-        <View>
-          <Image
-            style={styles.avatarLogo}
-            source={{
-              uri: user?.avatar_url,
-            }}
-          />
-        </View>
+
+        <Image
+          style={styles.avatarLogo}
+          source={{
+            uri: user?.avatar_url,
+          }}
+        />
       </View>
-      {user?.bio ? (
-        <View style={{ flexDirection: "column", marginTop: 20 }}>
-          <Text style={styles.bio}>BIO</Text>
-          <Text style={styles.bioText}>{user?.bio}</Text>
+      <TouchableOpacity
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {theme.mode === "dark" ? <BackDark /> : <BackLight />}
+          <Text style={styles.back}>Back</Text>
         </View>
-      ) : null}
+      </TouchableOpacity>
+
+      <View style={{ flexDirection: "column", marginTop: 10 }}>
+        <Text style={styles.bio}>BIO</Text>
+        {user?.bio ? <Text style={styles.bioText}>{user?.bio}</Text> : null}
+      </View>
     </View>
   );
 };
@@ -65,19 +133,14 @@ const makeStyles = (theme: {
   subText: string;
   primaryText: string;
   bio: string;
+  back: string;
 }) =>
   StyleSheet.create({
-    entire: {
-      flexDirection: "column",
-    },
-    top: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
     headerContainer: {
-      width: windowDimensions / 2,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      width: windowDimensions,
     },
     avatarLogo: {
       width: windowDimensions / 3,
@@ -112,5 +175,10 @@ const makeStyles = (theme: {
       fontFamily: "Inter-Semibold",
       textAlign: "center",
       marginTop: 10,
+    },
+    back: {
+      color: theme.back,
+      fontSize: 12,
+      fontFamily: "Inter-Medium",
     },
   });

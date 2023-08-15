@@ -8,6 +8,7 @@ import {
   VirtualizedList,
   TouchableOpacity,
   Switch,
+  Alert,
 } from "react-native";
 import { AxiosError, AxiosResponse } from "axios";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -32,6 +33,7 @@ export default function SearchScreen({ navigation }: Props) {
   const styles = makeStyles(activeColors);
 
   const [count, setCount] = useState(0);
+  const [results, setResults] = useState("");
   const [items, setItems] = useState<any>([]);
   const [currentItems, setCurrentItems] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
@@ -39,7 +41,7 @@ export default function SearchScreen({ navigation }: Props) {
   const [searchPhrase, setSearchPhrase] = useState("");
 
   const uniqueItems = useMemo(() => {
-    return currentItems.filter((element: any) => {
+    let newElements = currentItems.filter((element: any) => {
       const findId = items.find(
         (data: any) => data.node_id === element.node_id
       );
@@ -49,6 +51,8 @@ export default function SearchScreen({ navigation }: Props) {
       }
       return false;
     });
+    setItems(() => [...items, ...newElements]);
+    return [...items, ...newElements];
   }, [currentItems]);
 
   const fetchUserList = (page: number, searchPhrase: string) => {
@@ -58,14 +62,27 @@ export default function SearchScreen({ navigation }: Props) {
         .then(({ data }: AxiosResponse) => {
           setCount(data.total_count);
           setCurrentItems(data.items);
+          setResults(
+            data.total_count
+              ? `${data.total_count.toString().padStart(2)} users found`
+              : "No results found"
+          );
         })
         .catch((error: AxiosError) => {
-          console.log(error.response?.data);
+          Alert.alert(JSON.stringify(error.response?.data));
         })
         .finally(() => {
           setLoading(false);
         });
     }
+  };
+
+  const resetState = () => {
+    setCurrentItems([]);
+    setResults("");
+    setItems([]);
+    setPage(1);
+    setCount(0);
   };
 
   useEffect(() => {
@@ -113,24 +130,17 @@ export default function SearchScreen({ navigation }: Props) {
             setSearchPhrase(e);
           }}
           onClick={(searchPhrase: string) => {
-            setPage(1);
-            setItems([]);
+            resetState();
             fetchUserList(1, searchPhrase);
           }}
           onClose={() => {
             setSearchPhrase("");
-            setItems([]);
-            setPage(1);
-            setCount(0);
+            resetState();
           }}
         />
       </View>
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
-        {count > 0
-          ? `${count.toString().padStart(2)} user found`
-          : searchPhrase.trim()
-          ? "No result found"
-          : ""}
+        {searchPhrase.trim() ? results : ""}
       </Text>
       <View></View>
       <VirtualizedList
@@ -301,7 +311,6 @@ const makeStyles = (theme: any) =>
       color: theme.primaryText,
       fontFamily: "Inter-Extra",
       textTransform: "capitalize",
-      paddingBottom: 20,
-      marginTop: 20,
+      paddingVertical: 10,
     },
   });
