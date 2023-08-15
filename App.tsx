@@ -69,14 +69,22 @@ function App() {
     <ThemeContext.Provider value={{ theme, updateTheme }}>
       <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }}>
-          <StatusBar />
+          <StatusBar backgroundColor={"#000"} />
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
               initialRouteName="Search"
             >
-              <Stack.Screen name="Search" component={SearchScreen} />
-              <Stack.Screen name="Details" component={DetailsScreen} />
+              <Stack.Screen
+                name="Search"
+                component={SearchScreen}
+                options={{ animation: "fade_from_bottom" }}
+              />
+              <Stack.Screen
+                name="Details"
+                component={DetailsScreen}
+                options={{ animation: "fade_from_bottom" }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>

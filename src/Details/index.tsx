@@ -3,10 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
-import { NavigationProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AxiosResponse } from "axios";
 
@@ -16,11 +16,10 @@ import Main from "./Main";
 import { RootStackParamList } from "../../App";
 import { colors } from "../../utils/colors";
 import { ThemeContext } from "../../contexts/ThemeProvider";
-import Back from "../../assets/icons/back.svg";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Details">;
 
-export default function DetailsScreen({ route, navigation }: Props) {
+export default function DetailsScreen({ route }: Props) {
   const { username } = route.params;
 
   const { theme } = useContext(ThemeContext);
@@ -50,39 +49,22 @@ export default function DetailsScreen({ route, navigation }: Props) {
         >
           <ActivityIndicator size="large" color={theme.subText} />
         </View>
-      ) : (
-        <>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingBottom: 15,
-            }}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <Back style={{ marginRight: 12 }} />
-            <Text style={styles.back}>Back</Text>
-          </TouchableOpacity>
+      ) : user ? (
+        <View style={{ flex: 1 }}>
           <Header user={user} />
-          {user ? <Main user={user} /> : null}
-        </>
-      )}
+
+          <Main user={user} />
+        </View>
+      ) : null}
     </View>
   );
 }
-const makeStyles = (theme: { bg: string; back: string }) =>
+const makeStyles = (theme: { bg: string }) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.bg,
       paddingHorizontal: 20,
       paddingVertical: 20,
-    },
-    back: {
-      color: theme.back,
-      fontSize: 12,
-      fontFamily: "Inter-Medium",
     },
   });
