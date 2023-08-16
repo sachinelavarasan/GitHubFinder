@@ -1,6 +1,7 @@
 // In App.js in a new project
 import { useCallback, useState, useEffect } from "react";
-import { SafeAreaView, View, StatusBar } from "react-native";
+import { SafeAreaView, View, StatusBar, Alert } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
@@ -59,6 +60,22 @@ function App() {
 
   useEffect(() => {
     fetchSelectedTheme();
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.type === "cellular" || state.type === "wifi") {
+        if (!state.isConnected) {
+          Alert.alert(
+            "You are in Offline. Please, Check your network connection"
+          );
+        }
+      } else {
+        Alert.alert(
+          "You are in Offline. Please, Check your network connection"
+        );
+      }
+    });
+    // Unsubscribe
+    return () => unsubscribe();
   }, []);
 
   if (!fontsLoaded) {
