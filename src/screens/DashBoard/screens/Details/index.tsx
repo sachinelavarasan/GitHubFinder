@@ -1,23 +1,16 @@
-import { useEffect, useState, useContext } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AxiosResponse } from "axios";
+import { useEffect, useState, useContext } from 'react';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { AxiosResponse } from 'axios';
 
-import { fetchUser } from "../../api";
-import Header from "./Header";
-import Main from "./Main";
-import { RootStackParamList } from "../../App";
-import { colors } from "../../utils/colors";
-import { ThemeContext } from "../../contexts/ThemeProvider";
+import { fetchUser } from '../../../../api/gitApi';
+import Header from './components/Header';
+import Main from './components/Main';
+import { colors } from '../../../../../utils/colors';
+import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
+import { BottomNavigatorParamList } from '../..';
+import { StackScreenProps } from '@react-navigation/stack';
 
-type Props = NativeStackScreenProps<RootStackParamList, "Details">;
+type Props = StackScreenProps<BottomNavigatorParamList, 'Details'>;
 
 export default function DetailsScreen({ route }: Props) {
   const { username } = route.params;
@@ -45,7 +38,7 @@ export default function DetailsScreen({ route }: Props) {
     <View style={styles.container}>
       {loading ? (
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <ActivityIndicator size="large" color={theme.subText} />
         </View>
@@ -65,6 +58,6 @@ const makeStyles = (theme: { bg: string }) =>
       flex: 1,
       backgroundColor: theme.bg,
       paddingHorizontal: 20,
-      paddingVertical: 20,
-    },
+      paddingVertical: 20
+    }
   });

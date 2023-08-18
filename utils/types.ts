@@ -13,3 +13,13 @@ interface UserProps {
     public_repos: string;
   };
 }
+
+export interface loginInterface {
+  email: string;
+  password: string;
+}
+export interface signupInterface {
+  email: string;
+  password: string;
+  name: string;
+}
