@@ -1,4 +1,5 @@
 // In App.js in a new project
+
 import { useCallback, useState, useEffect } from 'react';
 import { View, StatusBar, Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -67,10 +68,10 @@ function App() {
     fetchSelectedTheme();
     // Subscribe
     const unsubscribe = NetInfo.addEventListener((state) => {
-      if (state.type === 'cellular' || state.type === 'wifi') {
+      if (state.type === "cellular" || state.type === "wifi") {
         if (!state.isConnected) {
           Alert.alert(
-            'You are in Offline. Please, Check your network connection'
+            "You are in Offline. Please, Check your network connection"
           );
         }
       } else {
