@@ -1,35 +1,35 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
-import { useContext } from "react";
+import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import { useContext } from 'react';
 
-import { ThemeContext } from "../../contexts/ThemeProvider";
-import { colors } from "../../utils/colors";
+import { ThemeContext } from '../../../../../../utils/contexts/ThemeProvider';
+import { colors } from '../../../../../../utils/colors';
 
-const windowDimensions = Dimensions.get("window").width - 40;
+const windowDimensions = Dimensions.get('window').width - 40;
 
 function padTo2Digits(num: Number) {
-  return num.toString().padStart(2, "0");
+  return num.toString().padStart(2, '0');
 }
 
 function formatDate(date: Date) {
   let monthList = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
   return [
     padTo2Digits(date.getDate()),
     monthList[date.getMonth()],
-    date.getFullYear(),
-  ].join(" ");
+    date.getFullYear()
+  ].join(' ');
 }
 
 const Main = ({ user }: UserProps) => {
@@ -42,9 +42,9 @@ const Main = ({ user }: UserProps) => {
       <ScrollView style={styles.card} showsVerticalScrollIndicator={false}>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Login</Text>
@@ -52,73 +52,73 @@ const Main = ({ user }: UserProps) => {
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Account Created</Text>
           <Text style={styles.cell}>
-            {formatDate(new Date(user?.created_at)) || "-"}
+            {formatDate(new Date(user?.created_at)) || '-'}
           </Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Location</Text>
-          <Text style={styles.cell}>{user?.location || "-"}</Text>
+          <Text style={styles.cell}>{user?.location || '-'}</Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Follower’s</Text>
-          <Text style={styles.cell}>{user?.followers || "-"}</Text>
+          <Text style={styles.cell}>{user?.followers || '-'}</Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Following’s</Text>
-          <Text style={styles.cell}>{user?.following || "-"}</Text>
+          <Text style={styles.cell}>{user?.following || '-'}</Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Company Name</Text>
-          <Text style={styles.cell}>{user?.company || "-"}</Text>
+          <Text style={styles.cell}>{user?.company || '-'}</Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             borderBottomColor: activeColors.bCard,
-            borderBottomWidth: 1,
+            borderBottomWidth: 1
           }}
         >
           <Text style={styles.col}>Type</Text>
-          <Text style={styles.cell}>{user?.type || "-"}</Text>
+          <Text style={styles.cell}>{user?.type || '-'}</Text>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row'
           }}
         >
           <Text style={styles.col}>Public Repo’</Text>
-          <Text style={styles.cell}>{user?.public_repos || "-"}</Text>
+          <Text style={styles.cell}>{user?.public_repos || '-'}</Text>
         </View>
       </ScrollView>
     </View>
@@ -142,16 +142,16 @@ const makeStyles = (theme: {
       shadowOpacity: 0.3,
       shadowRadius: 2,
       elevation: 4,
-      marginTop: 20,
+      marginTop: 20
     },
     col: {
       width: windowDimensions / 2,
-      textAlign: "right",
+      textAlign: 'right',
       paddingVertical: 10,
       paddingHorizontal: 12,
       color: theme.primaryText,
       fontSize: 14,
-      fontFamily: "Inter-Medium",
+      fontFamily: 'Inter-Medium'
     },
     cell: {
       width: windowDimensions / 2,
@@ -159,6 +159,6 @@ const makeStyles = (theme: {
       paddingHorizontal: 12,
       color: theme.subText,
       fontSize: 14,
-      fontFamily: "Inter-Medium",
-    },
+      fontFamily: 'Inter-Medium'
+    }
   });

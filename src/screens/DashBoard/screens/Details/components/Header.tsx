@@ -1,27 +1,27 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback } from 'react';
 import {
   Image,
   StyleSheet,
   Text,
   View,
   Dimensions,
-  Pressable,
   TouchableOpacity,
   Linking,
-  Alert,
-} from "react-native";
+  Alert
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import { colors } from "../../utils/colors";
-import BackLight from "../../assets/icons/back-light.svg";
-import BackDark from "../../assets/icons/back-dark.svg";
-import { ThemeContext } from "../../contexts/ThemeProvider";
-import GithubDark from "../../assets/icons/github-dark.svg";
-import GithubLight from "../../assets/icons/github-light.svg";
-import WebDark from "../../assets/icons/web-dark.svg";
-import WebLight from "../../assets/icons/web-light.svg";
-import { useNavigation } from "@react-navigation/native";
+import { colors } from '../../../../../../utils/colors';
+import { ThemeContext } from '../../../../../../utils/contexts/ThemeProvider';
 
-const windowDimensions = Dimensions.get("window").width - 40;
+import BackLight from '../../../../../../assets/icons/back-light.svg';
+import BackDark from '../../../../../../assets/icons/back-dark.svg';
+import GithubDark from '../../../../../../assets/icons/github-dark.svg';
+import GithubLight from '../../../../../../assets/icons/github-light.svg';
+import WebDark from '../../../../../../assets/icons/web-dark.svg';
+import WebLight from '../../../../../../assets/icons/web-light.svg';
+
+const windowDimensions = Dimensions.get('window').width - 40;
 
 const Header = ({ user }: any) => {
   const navigation = useNavigation();
@@ -50,15 +50,15 @@ const Header = ({ user }: any) => {
           {user?.blog ? (
             <TouchableOpacity
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginBottom: 4,
-                alignItems: "center",
+                alignItems: 'center'
               }}
               onPress={() => {
                 handlePress(user?.blog);
               }}
             >
-              {theme.mode === "dark" ? (
+              {theme.mode === 'dark' ? (
                 <WebDark style={{ marginRight: 12 }} />
               ) : (
                 <WebLight style={{ marginRight: 12 }} />
@@ -70,15 +70,15 @@ const Header = ({ user }: any) => {
           {user?.html_url ? (
             <TouchableOpacity
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginVertical: 4,
-                alignItems: "center",
+                alignItems: 'center'
               }}
               onPress={() => {
                 handlePress(user?.html_url);
               }}
             >
-              {theme.mode === "dark" ? (
+              {theme.mode === 'dark' ? (
                 <GithubDark style={{ marginRight: 12 }} />
               ) : (
                 <GithubLight style={{ marginRight: 12 }} />
@@ -92,15 +92,15 @@ const Header = ({ user }: any) => {
         <Image
           style={styles.avatarLogo}
           source={{
-            uri: user?.avatar_url,
+            uri: user?.avatar_url
           }}
         />
       </View>
       <TouchableOpacity
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
         onPress={() => {
           navigation.goBack();
@@ -108,18 +108,18 @@ const Header = ({ user }: any) => {
       >
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             padding: 10,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          {theme.mode === "dark" ? <BackDark /> : <BackLight />}
+          {theme.mode === 'dark' ? <BackDark /> : <BackLight />}
           <Text style={styles.back}>Back</Text>
         </View>
       </TouchableOpacity>
 
-      <View style={{ flexDirection: "column", marginTop: 10 }}>
+      <View style={{ flexDirection: 'column', marginTop: 10 }}>
         <Text style={styles.bio}>BIO</Text>
         {user?.bio ? <Text style={styles.bioText}>{user?.bio}</Text> : null}
       </View>
@@ -137,48 +137,48 @@ const makeStyles = (theme: {
 }) =>
   StyleSheet.create({
     headerContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: windowDimensions,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: windowDimensions
     },
     avatarLogo: {
       width: windowDimensions / 3,
       height: windowDimensions / 3,
       borderRadius: windowDimensions / 3,
-      resizeMode: "contain",
+      resizeMode: 'contain',
       borderColor: theme.subText,
-      borderWidth: 1,
+      borderWidth: 1
     },
     head: {
       color: theme.primaryText,
       fontSize: 24,
-      fontFamily: "Inter-Extra",
-      marginBottom: 10,
+      fontFamily: 'Inter-Extra',
+      marginBottom: 10
     },
     sub: {
       color: theme.subText,
       fontSize: 14,
-      fontFamily: "Inter-Medium",
+      fontFamily: 'Inter-Medium'
     },
     bio: {
       color: theme.primaryText,
       fontSize: 18,
-      fontFamily: "Inter-Bold",
+      fontFamily: 'Inter-Bold',
       padding: 10,
       backgroundColor: theme.bio,
-      textAlign: "center",
+      textAlign: 'center'
     },
     bioText: {
       color: theme.subText,
       fontSize: 16,
-      fontFamily: "Inter-Semibold",
-      textAlign: "center",
-      marginTop: 10,
+      fontFamily: 'Inter-Semibold',
+      textAlign: 'center',
+      marginTop: 10
     },
     back: {
       color: theme.back,
       fontSize: 12,
-      fontFamily: "Inter-Medium",
-    },
+      fontFamily: 'Inter-Medium'
+    }
   });
