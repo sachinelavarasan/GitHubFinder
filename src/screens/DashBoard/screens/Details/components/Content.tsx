@@ -3,6 +3,7 @@ import { useContext } from 'react';
 
 import { ThemeContext } from '../../../../../../utils/contexts/ThemeProvider';
 import { colors } from '../../../../../../utils/colors';
+import { UserProps } from '../../../../../../utils/types';
 
 const windowDimensions = Dimensions.get('window').width - 40;
 

@@ -15,14 +15,14 @@ import Login from './src/screens/Auth/screens/Login';
 import Register from './src/screens/Auth/screens/Register';
 import DashBoard from './src/screens/DashBoard';
 
-export type StackNavigatorParamList = {
+export type RootStackNavigatorParamList = {
   Auth: undefined;
   Login: undefined;
   Register: undefined;
   Dashboard: undefined;
 };
 
-const Stack = createStackNavigator<StackNavigatorParamList>();
+const Stack = createStackNavigator<RootStackNavigatorParamList>();
 
 function App() {
   const [theme, setTheme] = useState({ mode: 'dark' });

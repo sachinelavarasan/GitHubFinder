@@ -4,13 +4,13 @@ import { AxiosResponse } from 'axios';
 
 import { fetchUser } from '../../../../api/gitApi';
 import Header from './components/Header';
-import Main from './components/Main';
+import Main from './components/Content';
 import { colors } from '../../../../../utils/colors';
 import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
-import { BottomNavigatorParamList } from '../..';
+import { HomeStackNavigatorParamList } from '../..';
 import { StackScreenProps } from '@react-navigation/stack';
 
-type Props = StackScreenProps<BottomNavigatorParamList, 'Details'>;
+type Props = StackScreenProps<HomeStackNavigatorParamList, 'Details'>;
 
 export default function DetailsScreen({ route }: Props) {
   const { username } = route.params;

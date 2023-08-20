@@ -1,4 +1,4 @@
-interface UserProps {
+export interface UserProps {
   user: {
     node_id: number;
     login: string;

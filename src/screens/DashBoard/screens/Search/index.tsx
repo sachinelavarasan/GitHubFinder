@@ -5,10 +5,9 @@ import {
   Text,
   View,
   ActivityIndicator,
-  VirtualizedList,
   TouchableOpacity,
-  Switch,
-  Alert
+  Alert,
+  FlatList
 } from 'react-native';
 import { AxiosError, AxiosResponse } from 'axios';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -19,16 +18,18 @@ import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
 import { colors } from '../../../../../utils/colors';
 
 import ArrowSvg from '../../../../../assets/icons/arrow-move.svg';
-import DarkThemeIcon from '../../../../../assets/theme/moon.svg';
-import LightThemeIcon from '../../../../../assets/theme/sun.svg';
-import DarkThemeLogo from '../../../../../assets/logo/dark-logo.svg';
-import LightThemeLogo from '../../../../../assets/logo/light-logo.svg';
-import { BottomNavigatorParamList } from '../..';
 
-type Props = StackScreenProps<BottomNavigatorParamList, 'Search'>;
+import { BottomNavigatorParamList } from '..';
+import { HomeStackNavigatorParamList } from '../..';
+import Header from '../../components/Header';
 
-export default function SearchScreen({ navigation }: Props) {
-  const { theme, updateTheme } = useContext(ThemeContext);
+type Props = StackScreenProps<
+  HomeStackNavigatorParamList & BottomNavigatorParamList,
+  'Search'
+>;
+
+export default function SearchScreen({ navigation, route }: Props) {
+  const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
 
@@ -89,40 +90,42 @@ export default function SearchScreen({ navigation }: Props) {
     if (page > 1) fetchUserList(page, searchPhrase);
   }, [page]);
 
-  return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: 5,
-          marginBottom: 10
+  const renderItem = ({ item }: { item: any }) => {
+    return (
+      <TouchableOpacity
+        key={item.login}
+        style={[styles.card, styles.shadow]}
+        onPress={() => {
+          /* 1. Navigate to the Details route with params */
+          navigation.navigate('Details', {
+            username: item?.login
+          });
         }}
       >
-        <View style={{ marginRight: 4 }}>
-          {theme.mode === 'dark' ? <DarkThemeLogo /> : <LightThemeLogo />}
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
-        >
-          <View style={{ marginRight: 4 }}>
-            {theme.mode === 'dark' ? <DarkThemeIcon /> : <LightThemeIcon />}
-          </View>
-          <Switch
-            trackColor={{ false: '#000', true: '#fff' }}
-            thumbColor={theme.mode === 'dark' ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() => {
-              updateTheme();
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image
+            style={styles.avatarLogo}
+            source={{
+              uri: item?.avatar_url
             }}
-            value={theme.mode === 'dark'}
           />
+          <View style={{ marginLeft: 14 }}>
+            <Text style={[styles.text, { color: activeColors.primaryText }]}>
+              {item.login}
+            </Text>
+            <Text style={[styles.subText, { color: activeColors.subText }]}>
+              {item.html_url}
+            </Text>
+          </View>
         </View>
-      </View>
+        <ArrowSvg />
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header title={route.name} />
       <View>
         <SearchBar
           searchPhrase={searchPhrase}
@@ -142,52 +145,12 @@ export default function SearchScreen({ navigation }: Props) {
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
         {searchPhrase.trim() ? results : ''}
       </Text>
-      <View></View>
-      <VirtualizedList
+      <FlatList
         style={styles.cardContainer}
         showsVerticalScrollIndicator={false}
         data={uniqueItems}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              key={item.login}
-              style={[styles.card, styles.shadow]}
-              onPress={() => {
-                /* 1. Navigate to the Details route with params */
-                navigation.navigate('Details', {
-                  username: item?.login
-                });
-              }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                  style={styles.avatarLogo}
-                  source={{
-                    uri: item?.avatar_url
-                  }}
-                />
-                <View style={{ marginLeft: 14 }}>
-                  <Text
-                    style={[styles.text, { color: activeColors.primaryText }]}
-                  >
-                    {item.login}
-                  </Text>
-                  <Text
-                    style={[styles.subText, { color: activeColors.subText }]}
-                  >
-                    {item.html_url}
-                  </Text>
-                </View>
-              </View>
-              <ArrowSvg />
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={renderItem}
         keyExtractor={(item: any) => item.node_id}
-        getItemCount={() => {
-          return uniqueItems.length;
-        }}
-        getItem={(data: any, index: number) => data[index]}
         ListFooterComponent={
           loading ? (
             <View

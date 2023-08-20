@@ -16,7 +16,7 @@ const gitInstance = axios.create({
 });
 
 const apiInstance = axios.create({
-  baseURL: 'https://3eb2-2409-4072-2e1e-bea3-c04b-61cf-a42c-d066.ngrok.io/'
+  baseURL: 'https://740f-2409-4072-6e99-cd1e-799d-114-6f7b-b9f.ngrok.io/'
 });
 
 apiInstance.interceptors.request.use(
