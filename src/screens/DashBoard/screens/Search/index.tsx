@@ -1,44 +1,45 @@
-import { useEffect, useMemo, useState, useContext } from "react";
+import { useEffect, useMemo, useState, useContext } from 'react';
 import {
   Image,
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
-  VirtualizedList,
   TouchableOpacity,
-  Switch,
   Alert,
-} from "react-native";
-import { AxiosError, AxiosResponse } from "axios";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+  FlatList
+} from 'react-native';
+import { AxiosError, AxiosResponse } from 'axios';
+import { StackScreenProps } from '@react-navigation/stack';
 
-import { fetchUsers } from "../../api";
-import SearchBar from "../../common/SearchBar";
-import { RootStackParamList } from "../../App";
-import { ThemeContext } from "../../contexts/ThemeProvider";
-import { colors } from "../../utils/colors";
+import { fetchUsers } from '../../../../api/gitApi';
+import { SearchBar } from '../../../../components';
+import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
+import { colors } from '../../../../../utils/colors';
 
-import ArrowSvg from "../../assets/icons/arrow-move.svg";
-import DarkThemeIcon from "../../assets/theme/moon.svg";
-import LightThemeIcon from "../../assets/theme/sun.svg";
-import DarkThemeLogo from "../../assets/logo/dark-logo.svg";
-import LightThemeLogo from "../../assets/logo/light-logo.svg";
+import ArrowSvg from '../../../../../assets/icons/arrow-move.svg';
 
-type Props = NativeStackScreenProps<RootStackParamList, "Search">;
+import { BottomNavigatorParamList } from '..';
+import { HomeStackNavigatorParamList } from '../..';
+import Header from '../../components/Header';
 
-export default function SearchScreen({ navigation }: Props) {
-  const { theme, updateTheme } = useContext(ThemeContext);
+type Props = StackScreenProps<
+  HomeStackNavigatorParamList & BottomNavigatorParamList,
+  'Search'
+>;
+
+export default function SearchScreen({ navigation, route }: Props) {
+  const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
 
   const [count, setCount] = useState(0);
-  const [results, setResults] = useState("");
+  const [results, setResults] = useState('');
   const [items, setItems] = useState<any>([]);
   const [currentItems, setCurrentItems] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [searchPhrase, setSearchPhrase] = useState("");
+  const [searchPhrase, setSearchPhrase] = useState('');
 
   const uniqueItems = useMemo(() => {
     let newElements = currentItems.filter((element: any) => {
@@ -65,7 +66,7 @@ export default function SearchScreen({ navigation }: Props) {
           setResults(
             data.total_count
               ? `${data.total_count.toString().padStart(2)} users found`
-              : "No results found"
+              : 'No results found'
           );
         })
         .catch((error: AxiosError) => {
@@ -79,7 +80,7 @@ export default function SearchScreen({ navigation }: Props) {
 
   const resetState = () => {
     setCurrentItems([]);
-    setResults("");
+    setResults('');
     setItems([]);
     setPage(1);
     setCount(0);
@@ -89,40 +90,42 @@ export default function SearchScreen({ navigation }: Props) {
     if (page > 1) fetchUserList(page, searchPhrase);
   }, [page]);
 
-  return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 5,
-          marginBottom: 10,
+  const renderItem = ({ item }: { item: any }) => {
+    return (
+      <TouchableOpacity
+        key={item.login}
+        style={[styles.card, styles.shadow]}
+        onPress={() => {
+          /* 1. Navigate to the Details route with params */
+          navigation.navigate('Details', {
+            username: item?.login
+          });
         }}
       >
-        <View style={{ marginRight: 4 }}>
-          {theme.mode === "dark" ? <DarkThemeLogo /> : <LightThemeLogo />}
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <View style={{ marginRight: 4 }}>
-            {theme.mode === "dark" ? <DarkThemeIcon /> : <LightThemeIcon />}
-          </View>
-          <Switch
-            trackColor={{ false: "#000", true: "#fff" }}
-            thumbColor={theme.mode === "dark" ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() => {
-              updateTheme();
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image
+            style={styles.avatarLogo}
+            source={{
+              uri: item?.avatar_url
             }}
-            value={theme.mode === "dark"}
           />
+          <View style={{ marginLeft: 14 }}>
+            <Text style={[styles.text, { color: activeColors.primaryText }]}>
+              {item.login}
+            </Text>
+            <Text style={[styles.subText, { color: activeColors.subText }]}>
+              {item.html_url}
+            </Text>
+          </View>
         </View>
-      </View>
+        <ArrowSvg />
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header title={route.name} />
       <View>
         <SearchBar
           searchPhrase={searchPhrase}
@@ -134,67 +137,27 @@ export default function SearchScreen({ navigation }: Props) {
             fetchUserList(1, searchPhrase);
           }}
           onClose={() => {
-            setSearchPhrase("");
+            setSearchPhrase('');
             resetState();
           }}
         />
       </View>
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
-        {searchPhrase.trim() ? results : ""}
+        {searchPhrase.trim() ? results : ''}
       </Text>
-      <View></View>
-      <VirtualizedList
+      <FlatList
         style={styles.cardContainer}
         showsVerticalScrollIndicator={false}
         data={uniqueItems}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              key={item.login}
-              style={[styles.card, styles.shadow]}
-              onPress={() => {
-                /* 1. Navigate to the Details route with params */
-                navigation.navigate("Details", {
-                  username: item?.login,
-                });
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  style={styles.avatarLogo}
-                  source={{
-                    uri: item?.avatar_url,
-                  }}
-                />
-                <View style={{ marginLeft: 14 }}>
-                  <Text
-                    style={[styles.text, { color: activeColors.primaryText }]}
-                  >
-                    {item.login}
-                  </Text>
-                  <Text
-                    style={[styles.subText, { color: activeColors.subText }]}
-                  >
-                    {item.html_url}
-                  </Text>
-                </View>
-              </View>
-              <ArrowSvg />
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={renderItem}
         keyExtractor={(item: any) => item.node_id}
-        getItemCount={() => {
-          return uniqueItems.length;
-        }}
-        getItem={(data: any, index: number) => data[index]}
         ListFooterComponent={
           loading ? (
             <View
               style={{
                 flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               <ActivityIndicator size="large" color={activeColors.subText} />
@@ -202,9 +165,9 @@ export default function SearchScreen({ navigation }: Props) {
           ) : uniqueItems.length && count - page * 30 > 0 ? (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               <TouchableOpacity
@@ -216,22 +179,22 @@ export default function SearchScreen({ navigation }: Props) {
                 style={{
                   borderColor: activeColors.subText,
                   borderWidth: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   padding: 7,
                   backgroundColor: activeColors.subText,
                   opacity: 0.8,
                   borderRadius: 5,
                   paddingHorizontal: 15,
-                  paddingBottom: 10,
+                  paddingBottom: 10
                 }}
               >
                 <Text
                   style={{
-                    color: "white",
-                    textAlignVertical: "center",
-                    fontSize: 14,
+                    color: 'white',
+                    textAlignVertical: 'center',
+                    fontSize: 14
                   }}
                 >
                   Load More
@@ -263,25 +226,25 @@ const makeStyles = (theme: any) =>
       flex: 1,
       backgroundColor: theme.bg,
       paddingHorizontal: 20,
-      paddingVertical: 20,
+      paddingVertical: 20
     },
     avatarLogo: {
       width: 50,
       height: 50,
       borderRadius: 50,
-      resizeMode: "contain",
+      resizeMode: 'contain',
       borderColor: theme.subText,
-      borderWidth: 1,
+      borderWidth: 1
     },
     cardContainer: {
-      flex: 1,
+      flex: 1
     },
     text: {
       fontSize: 16,
-      fontStyle: "normal",
+      fontStyle: 'normal',
       color: theme.primaryText,
-      fontFamily: "Inter-Bold",
-      textTransform: "capitalize",
+      fontFamily: 'Inter-Bold',
+      textTransform: 'capitalize'
     },
     card: {
       backgroundColor: theme.cardBg,
@@ -290,27 +253,27 @@ const makeStyles = (theme: any) =>
       borderWidth: 1,
       borderColor: theme.cardBg,
       marginBottom: 10,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
     },
     shadow: {
       shadowColor: theme.shadowColor,
       shadowOffset: { width: 4, height: 4 },
       shadowOpacity: 0.3,
       shadowRadius: 2,
-      elevation: 4,
+      elevation: 4
     },
     subText: {
       color: theme.subText,
       fontSize: 12,
-      fontFamily: "Inter-Normal",
+      fontFamily: 'Inter-Normal'
     },
     header: {
       fontSize: 14,
       color: theme.primaryText,
-      fontFamily: "Inter-Extra",
-      textTransform: "capitalize",
-      paddingVertical: 10,
-    },
+      fontFamily: 'Inter-Extra',
+      textTransform: 'capitalize',
+      paddingVertical: 10
+    }
   });

@@ -1,4 +1,4 @@
-interface UserProps {
+export interface UserProps {
   user: {
     node_id: number;
     login: string;
@@ -12,4 +12,14 @@ interface UserProps {
     type: string;
     public_repos: string;
   };
+}
+
+export interface loginInterface {
+  email: string;
+  password: string;
+}
+export interface signupInterface {
+  email: string;
+  password: string;
+  name: string;
 }
