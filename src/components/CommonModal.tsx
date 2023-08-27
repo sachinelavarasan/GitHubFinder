@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View } from 'react-native';
+import React, { ReactNode } from "react";
+import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
 
 const CommonModal = ({
   isShow,
@@ -23,13 +23,13 @@ const CommonModal = ({
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(51, 46, 46, 0.4)'
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(51, 46, 46, 0.4)"
           }}
         >
           <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
             <View style={styles.modalView}>{children}</View>
           </View>
@@ -42,7 +42,7 @@ const CommonModal = ({
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    position: 'absolute',
+    position: "absolute",
     zIndex: 10,
     left: 0,
     right: 0,
@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 16,
     padding: 25,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2

@@ -1,4 +1,4 @@
-import { gitInstance } from './instance';
+import { gitInstance } from "./instance";
 
 export const fetchUsers = (data: any) => {
   return gitInstance.get(`search/users?q=${data.q}&page=${data.page}`);

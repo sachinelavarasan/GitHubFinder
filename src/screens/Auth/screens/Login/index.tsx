@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -11,17 +11,17 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator
-} from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+} from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import AuthLink from '../../components/AuthLink';
-import Input from '../../../../components/Input';
-import Spacer from '../../../../components/Spacer';
+import AuthLink from "../../components/AuthLink";
+import Input from "../../../../components/Input";
+import Spacer from "../../../../components/Spacer";
 
-import { isEmail } from '../../../../../utils/validation';
-import { RootStackNavigatorParamList } from '../../../../../App';
-import { login } from '../../../../api/api';
-import { AxiosResponse } from 'axios';
+import { isEmail } from "../../../../../utils/validation";
+import { RootStackNavigatorParamList } from "../../../../../App";
+import { login } from "../../../../api/api";
+import { AxiosResponse } from "axios";
 
 type StateType = string | undefined;
 
@@ -33,42 +33,42 @@ const Login = () => {
   const [email, setEmail] = useState<StateType>();
   const [password, setPassword] = useState<StateType>();
   const [errors, setErrors] = useState<{ email: string; password: string }>({
-    email: '',
-    password: ''
+    email: "",
+    password: ""
   });
   const [isAuthError, setIsAuthError] = useState<string>();
 
   const signIn = () => {
-    setIsAuthError('');
+    setIsAuthError("");
     if (!isEmail(email)) {
-      setErrors((state) => ({ ...state, email: 'Invalid email' }));
+      setErrors((state) => ({ ...state, email: "Invalid email" }));
       return false;
     }
     if (!password) {
       setErrors((state) => ({
         ...state,
-        password: 'Password cannot be an empty'
+        password: "Password cannot be an empty"
       }));
       return false;
     }
 
-    setErrors({ email: '', password: '' });
+    setErrors({ email: "", password: "" });
 
     setIsLoading(true);
     if (email && password) {
       login({ email: email, password: password })
         .then(async ({ data }: AxiosResponse) => {
-          await AsyncStorage.setItem('@token', data.token);
-          await AsyncStorage.setItem('@user', JSON.stringify(data.user));
+          await AsyncStorage.setItem("@token", data.token);
+          await AsyncStorage.setItem("@user", JSON.stringify(data.user));
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: 'Dashboard' }]
+              routes: [{ name: "Dashboard" }]
             })
           );
 
-          setEmail('');
-          setPassword('');
+          setEmail("");
+          setPassword("");
         })
         .catch((e: any) => {
           console.log(e.response?.data);
@@ -80,20 +80,20 @@ const Login = () => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
+      {...(Platform.OS === "ios" ? { behavior: "padding" } : {})}
       style={{ flex: 1 }}
     >
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flex: 1 }}
-        keyboardShouldPersistTaps={'always'}
+        keyboardShouldPersistTaps={"always"}
       >
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <View style={styles.imageContainer}>
               <Image
-                source={require('../../../../../assets/app-icon.png')}
+                source={require("../../../../../assets/app-icon.png")}
                 style={styles.image}
                 resizeMode="contain"
               />
@@ -114,7 +114,7 @@ const Login = () => {
                 keyboardType="email-address"
                 autoComplete="off"
                 onChangeText={(text) => {
-                  setErrors({ email: '', password: '' });
+                  setErrors({ email: "", password: "" });
                   setEmail(text);
                 }}
                 error={errors.email}
@@ -127,7 +127,7 @@ const Login = () => {
                 autoCapitalize="none"
                 isPassword
                 onChangeText={(text) => {
-                  setErrors({ email: '', password: '' });
+                  setErrors({ email: "", password: "" });
                   setPassword(text);
                 }}
                 error={errors.password}
@@ -145,7 +145,7 @@ const Login = () => {
                   {isLoading ? (
                     <ActivityIndicator
                       animating
-                      color={'#fff'}
+                      color={"#fff"}
                       style={styles.loader}
                     />
                   ) : null}
@@ -161,7 +161,7 @@ const Login = () => {
                 linkText="Register"
                 description="Dont have an account ?"
                 onPress={() => {
-                  navigation.navigate('Register');
+                  navigation.navigate("Register");
                 }}
               />
               <Spacer height={50} />
@@ -176,14 +176,14 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff"
   },
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   loginContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 35
   },
   image: {
@@ -192,43 +192,43 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: "center"
   },
   btnContainer: {
-    alignItems: 'center'
+    alignItems: "center"
   },
   button: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#000',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#000",
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 25
   },
   loader: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center'
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center"
   },
   title: {
-    color: '#fff',
-    fontWeight: '800',
+    color: "#fff",
+    fontWeight: "800",
     fontSize: 16,
-    fontFamily: 'Inter-Medium'
+    fontFamily: "Inter-Medium"
   },
   disable: {
     opacity: 0.8
   },
   textDisable: { opacity: 0 },
   errorContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
   },
   error: {
     fontSize: 16,
-    color: 'red',
-    fontFamily: 'Inter-Medium',
+    color: "red",
+    fontFamily: "Inter-Medium",
     paddingHorizontal: 35
   }
 });

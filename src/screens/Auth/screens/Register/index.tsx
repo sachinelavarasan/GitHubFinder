@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -11,15 +11,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Text
-} from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+} from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import AuthLink from '../../components/AuthLink';
-import Input from '../../../../components/Input';
-import Spacer from '../../../../components/Spacer';
-import { register } from '../../../../api/api';
-import { isEmail } from '../../../../../utils/validation';
-import { RootStackNavigatorParamList } from '../../../../../App';
+import AuthLink from "../../components/AuthLink";
+import Input from "../../../../components/Input";
+import Spacer from "../../../../components/Spacer";
+import { register } from "../../../../api/api";
+import { isEmail } from "../../../../../utils/validation";
+import { RootStackNavigatorParamList } from "../../../../../App";
 
 type StateType = string;
 
@@ -28,35 +28,35 @@ type registerScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
 const Register = () => {
   const navigation = useNavigation<registerScreenProp>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<StateType>('');
-  const [name, setName] = useState<StateType>('');
-  const [password, setPassword] = useState<StateType>('');
+  const [email, setEmail] = useState<StateType>("");
+  const [name, setName] = useState<StateType>("");
+  const [password, setPassword] = useState<StateType>("");
   const [errors, setErrors] = useState<{
     email: string;
     password: string;
     name: string;
   }>({
-    email: '',
-    password: '',
-    name: ''
+    email: "",
+    password: "",
+    name: ""
   });
   const [isAuthError, setIsAuthError] = useState<string>();
 
   const signUp = async () => {
-    setIsAuthError('');
+    setIsAuthError("");
     if (!isEmail(email)) {
-      setErrors((state) => ({ ...state, email: 'Invalid email' }));
+      setErrors((state) => ({ ...state, email: "Invalid email" }));
       return false;
     }
     if (!password) {
       setErrors((state) => ({
         ...state,
-        password: 'Password cannot be an empty'
+        password: "Password cannot be an empty"
       }));
       return false;
     }
 
-    setErrors({ email: '', password: '', name: '' });
+    setErrors({ email: "", password: "", name: "" });
     setIsLoading(true);
     if (email && password) {
       register({ email: email, password: password, name: name })
@@ -64,12 +64,12 @@ const Register = () => {
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: 'login' }]
+              routes: [{ name: "login" }]
             })
           );
-          setEmail('');
-          setPassword('');
-          setName('');
+          setEmail("");
+          setPassword("");
+          setName("");
         })
         .catch((e) => setIsAuthError(e.response.data.message))
         .finally(() => setIsLoading(false));
@@ -78,20 +78,20 @@ const Register = () => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
+      {...(Platform.OS === "ios" ? { behavior: "padding" } : {})}
       style={{ flex: 1 }}
     >
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flex: 1 }}
-        keyboardShouldPersistTaps={'always'}
+        keyboardShouldPersistTaps={"always"}
       >
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <View style={styles.imageContainer}>
               <Image
-                source={require('../../../../../assets/app-icon.png')}
+                source={require("../../../../../assets/app-icon.png")}
                 style={styles.image}
                 resizeMode="contain"
               />
@@ -111,7 +111,7 @@ const Register = () => {
                 autoCapitalize="none"
                 autoComplete="off"
                 onChangeText={(text) => {
-                  setErrors({ email: '', password: '', name: '' });
+                  setErrors({ email: "", password: "", name: "" });
                   setEmail(text);
                 }}
                 error={errors.email}
@@ -124,7 +124,7 @@ const Register = () => {
                 autoCapitalize="none"
                 isPassword
                 onChangeText={(text) => {
-                  setErrors({ email: '', password: '', name: '' });
+                  setErrors({ email: "", password: "", name: "" });
                   setPassword(text);
                 }}
                 error={errors.password}
@@ -137,7 +137,7 @@ const Register = () => {
                 autoCapitalize="none"
                 isPassword
                 onChangeText={(text) => {
-                  setErrors({ email: '', password: '', name: '' });
+                  setErrors({ email: "", password: "", name: "" });
                   setName(text);
                 }}
                 error={errors.name}
@@ -155,7 +155,7 @@ const Register = () => {
                   {isLoading ? (
                     <ActivityIndicator
                       animating
-                      color={'#fff'}
+                      color={"#fff"}
                       style={styles.loader}
                     />
                   ) : null}
@@ -171,7 +171,7 @@ const Register = () => {
                 linkText="Sign In"
                 description="Already have an account ?"
                 onPress={() => {
-                  navigation.navigate('Login');
+                  navigation.navigate("Login");
                 }}
               />
               <Spacer height={50} />
@@ -186,59 +186,59 @@ const Register = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff"
   },
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   image: {
     height: 150,
     width: 150
   },
   loginContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 35
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: "center"
   },
   btnContainer: {
-    alignItems: 'center'
+    alignItems: "center"
   },
   button: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#000',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#000",
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 25
   },
   loader: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center'
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center"
   },
   title: {
-    color: '#fff',
-    fontWeight: '800',
+    color: "#fff",
+    fontWeight: "800",
     fontSize: 16,
-    fontFamily: 'Inter-Medium'
+    fontFamily: "Inter-Medium"
   },
   disable: {
     opacity: 0.8
   },
   textDisable: { opacity: 0 },
   errorContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
   },
   error: {
     fontSize: 16,
-    color: 'red',
-    fontFamily: 'Inter-Medium',
+    color: "red",
+    fontFamily: "Inter-Medium",
     paddingHorizontal: 35
   }
 });

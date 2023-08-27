@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useContext } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StyleSheet, Text, View } from "react-native";
+import { useContext } from "react";
+import { StackScreenProps } from "@react-navigation/stack";
 
-import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
-import { colors } from '../../../../../utils/colors';
-import { BottomNavigatorParamList } from '..';
-import { HomeStackNavigatorParamList } from '../..';
-import Header from '../../components/Header';
+import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
+import { colors } from "../../../../../utils/colors";
+import { BottomNavigatorParamList } from "..";
+import { HomeStackNavigatorParamList } from "../..";
+import Header from "../../components/Header";
 
 type Props = StackScreenProps<
   HomeStackNavigatorParamList & BottomNavigatorParamList,
-  'Favorites'
+  "Favorites"
 >;
 
 const Favorites = ({ route }: Props) => {
@@ -37,8 +37,8 @@ const makeStyles = (theme: any) =>
     header: {
       fontSize: 16,
       color: theme.primaryText,
-      fontFamily: 'Inter-Extra',
-      textTransform: 'capitalize',
+      fontFamily: "Inter-Extra",
+      textTransform: "capitalize",
       paddingVertical: 10
     }
   });

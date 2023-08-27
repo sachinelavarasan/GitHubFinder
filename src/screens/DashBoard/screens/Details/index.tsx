@@ -1,16 +1,16 @@
-import { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { AxiosResponse } from 'axios';
+import { useEffect, useState, useContext } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { AxiosResponse } from "axios";
 
-import { fetchUser } from '../../../../api/gitApi';
-import Header from './components/Header';
-import Main from './components/Content';
-import { colors } from '../../../../../utils/colors';
-import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
-import { HomeStackNavigatorParamList } from '../..';
-import { StackScreenProps } from '@react-navigation/stack';
+import { fetchUser } from "../../../../api/gitApi";
+import Header from "./components/Header";
+import Main from "./components/Content";
+import { colors } from "../../../../../utils/colors";
+import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
+import { HomeStackNavigatorParamList } from "../..";
+import { StackScreenProps } from "@react-navigation/stack";
 
-type Props = StackScreenProps<HomeStackNavigatorParamList, 'Details'>;
+type Props = StackScreenProps<HomeStackNavigatorParamList, "Details">;
 
 export default function DetailsScreen({ route }: Props) {
   const { username } = route.params;
@@ -38,7 +38,7 @@ export default function DetailsScreen({ route }: Props) {
     <View style={styles.container}>
       {loading ? (
         <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <ActivityIndicator size="large" color={theme.subText} />
         </View>
