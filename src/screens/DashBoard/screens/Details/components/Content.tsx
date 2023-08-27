@@ -142,7 +142,7 @@ const makeStyles = (theme: {
       shadowOffset: { width: 4, height: 4 },
       shadowOpacity: 0.3,
       shadowRadius: 2,
-      elevation: 4,
+      elevation: -4,
       marginTop: 20
     },
     col: {

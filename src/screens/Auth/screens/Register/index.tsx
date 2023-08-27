@@ -19,11 +19,11 @@ import Input from '../../../../components/Input';
 import Spacer from '../../../../components/Spacer';
 import { register } from '../../../../api/api';
 import { isEmail } from '../../../../../utils/validation';
-import { StackNavigatorParamList } from '../../../../../App';
+import { RootStackNavigatorParamList } from '../../../../../App';
 
 type StateType = string;
 
-type registerScreenProp = StackNavigationProp<StackNavigatorParamList>;
+type registerScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
 
 const Register = () => {
   const navigation = useNavigation<registerScreenProp>();

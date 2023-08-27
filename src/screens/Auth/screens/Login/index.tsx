@@ -19,13 +19,13 @@ import Input from '../../../../components/Input';
 import Spacer from '../../../../components/Spacer';
 
 import { isEmail } from '../../../../../utils/validation';
-import { StackNavigatorParamList } from '../../../../../App';
+import { RootStackNavigatorParamList } from '../../../../../App';
 import { login } from '../../../../api/api';
 import { AxiosResponse } from 'axios';
 
 type StateType = string | undefined;
 
-type loginScreenProp = StackNavigationProp<StackNavigatorParamList>;
+type loginScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
 
 const Login = () => {
   const navigation = useNavigation<loginScreenProp>();

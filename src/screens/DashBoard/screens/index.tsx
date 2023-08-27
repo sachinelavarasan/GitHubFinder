@@ -1,14 +1,21 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useContext } from 'react';
 
 import SearchScreen from './Search';
 import Favorites from './Favorites';
 import Settings from './Settings';
 
-import SearchActive from '../../../../assets/icons/Search.svg';
 import Favorite from '../../../../assets/icons/Bookmark-light.svg';
 import Setting from '../../../../assets/icons/Setting-light.svg';
+import Search from '../../../../assets/icons/Search-light.svg';
+
+import SearchActive from '../../../../assets/icons/Search.svg';
+import FavoriteActive from '../../../../assets/icons/Bookmark-active.svg';
+import SettingActive from '../../../../assets/icons/Setting-active.svg';
+import { ThemeContext } from '../../../../utils/contexts/ThemeProvider';
+import { colors } from '../../../../utils/colors';
 
 export type BottomNavigatorParamList = {
   Search: undefined;
@@ -26,19 +33,19 @@ const getIcons = (title: string, isActive: boolean) => {
       if (isActive) {
         return <SearchActive style={style} />;
       } else {
-        return <SearchActive style={style} />;
+        return <Search style={style} />;
       }
 
     case 'Favorites':
       if (isActive) {
-        return <SearchActive style={style} />;
+        return <FavoriteActive style={style} />;
       } else {
         return <Favorite style={style} />;
       }
 
     case 'Settings':
       if (isActive) {
-        return <SearchActive style={style} />;
+        return <SettingActive style={style} />;
       } else {
         return <Setting style={style} />;
       }
@@ -46,6 +53,9 @@ const getIcons = (title: string, isActive: boolean) => {
 };
 
 function MyTabBar({ state, descriptors, navigation }: any) {
+  const { theme } = useContext(ThemeContext);
+  const activeColors = colors[theme.mode];
+
   return (
     <View
       style={{
@@ -54,7 +64,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         justifyContent: 'space-between',
         alignItems: 'center',
         elevation: 10,
-        backgroundColor: '#FFF',
+        backgroundColor: activeColors.cardBg,
         paddingVertical: 10,
         paddingHorizontal: 20
       }}

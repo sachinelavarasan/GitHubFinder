@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState, useContext, useCallback } from 'react';
 import {
   Image,
   StyleSheet,
@@ -9,6 +9,9 @@ import {
   Alert,
   FlatList
 } from 'react-native';
+
+import Realm from 'realm';
+
 import { AxiosError, AxiosResponse } from 'axios';
 import { StackScreenProps } from '@react-navigation/stack';
 
@@ -22,6 +25,8 @@ import ArrowSvg from '../../../../../assets/icons/arrow-move.svg';
 import { BottomNavigatorParamList } from '..';
 import { HomeStackNavigatorParamList } from '../..';
 import Header from '../../components/Header';
+import { useRealm } from '../../../../models';
+import { SearchHistory } from '../../../../models/SearchHistory';
 
 type Props = StackScreenProps<
   HomeStackNavigatorParamList & BottomNavigatorParamList,
@@ -32,6 +37,7 @@ export default function SearchScreen({ navigation, route }: Props) {
   const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
+  const realm = useRealm();
 
   const [count, setCount] = useState(0);
   const [results, setResults] = useState('');
@@ -78,6 +84,15 @@ export default function SearchScreen({ navigation, route }: Props) {
     }
   };
 
+  const handleSearchHistory = useCallback((): void => {
+    if (!searchPhrase) {
+      return;
+    }
+    realm.write(async () => {
+      realm.create('SearchHistory', SearchHistory.generate(searchPhrase));
+    });
+  }, [realm, searchPhrase]);
+
   const resetState = () => {
     setCurrentItems([]);
     setResults('');
@@ -102,7 +117,9 @@ export default function SearchScreen({ navigation, route }: Props) {
           });
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View
+          style={{ flexDirection: 'row', alignItems: 'center', width: '80%' }}
+        >
           <Image
             style={styles.avatarLogo}
             source={{
@@ -134,6 +151,7 @@ export default function SearchScreen({ navigation, route }: Props) {
           }}
           onClick={(searchPhrase: string) => {
             resetState();
+            handleSearchHistory();
             fetchUserList(1, searchPhrase);
           }}
           onClose={() => {
