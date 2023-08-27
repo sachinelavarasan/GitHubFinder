@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
-import { RootStackNavigatorParamList } from '../../../App';
+import { RootStackNavigatorParamList } from "../../../App";
 
 type authScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
 
@@ -13,12 +13,12 @@ const Auth = () => {
 
   const checkIsLoggedIn = useCallback(async () => {
     try {
-      const tokenId = await AsyncStorage.getItem('@token');
+      const tokenId = await AsyncStorage.getItem("@token");
       if (tokenId) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'Dashboard' }]
+            routes: [{ name: "Dashboard" }]
           })
         );
         return false;
@@ -27,7 +27,7 @@ const Auth = () => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'Login' }]
+          routes: [{ name: "Login" }]
         })
       );
     } catch (e) {
@@ -49,8 +49,8 @@ const Auth = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 

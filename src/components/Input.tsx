@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   TextInputProps,
   TouchableOpacity,
   View
-} from 'react-native';
+} from "react-native";
 
 interface ExtraInputProps {
   label?: string;
@@ -44,11 +44,11 @@ const Input: React.FC<ExtraInputProps & TextInputProps> = ({
             ]}
             secureTextEntry={isPassword && !show}
             autoCorrect={false}
-            autoComplete={'off'}
+            autoComplete={"off"}
             selectTextOnFocus={false}
             autoCapitalize="none"
             spellCheck={false}
-            placeholderTextColor={'#999999'}
+            placeholderTextColor={"#999999"}
             selectionColor="#000"
           />
           {isPassword ? (
@@ -57,8 +57,8 @@ const Input: React.FC<ExtraInputProps & TextInputProps> = ({
                 style={styles.inputIconPassword}
                 source={
                   show
-                    ? require('../../assets/icons/eye_open.png')
-                    : require('../../assets/icons/eye_close.png')
+                    ? require("../../assets/icons/eye_open.png")
+                    : require("../../assets/icons/eye_close.png")
                 }
               />
             </TouchableOpacity>
@@ -74,7 +74,7 @@ export default Input;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    borderColor: '#F2F2F2',
+    borderColor: "#F2F2F2",
     borderRadius: 10,
     borderWidth: 1,
     marginBottom: 0
@@ -86,31 +86,31 @@ const styles = StyleSheet.create({
     paddingRight: 21
   },
   innerView: {
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center"
   },
   input: {
     flex: 1,
     borderWidth: 0,
     paddingVertical: 12,
     fontSize: 14,
-    fontWeight: '600',
-    fontFamily: 'Inter-Medium',
-    color: '#000',
+    fontWeight: "600",
+    fontFamily: "Inter-Medium",
+    color: "#000",
     paddingHorizontal: 24
   },
   label: {
     fontSize: 14,
-    color: '#000',
-    fontWeight: '600',
+    color: "#000",
+    fontWeight: "600",
     marginBottom: 2,
-    fontFamily: 'Inter-Medium'
+    fontFamily: "Inter-Medium"
   },
   error: {
     fontSize: 12,
-    color: 'red',
+    color: "red",
     marginBottom: 3,
-    position: 'absolute',
+    position: "absolute",
     marginTop: 70
   },
   inputIconPassword: {
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 15,
-    fontWeight: '900'
+    fontWeight: "900"
   }
 });

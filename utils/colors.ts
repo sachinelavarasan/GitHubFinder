@@ -8,7 +8,7 @@ export const colors: any = {
     bio: "#D9D9D90A",
     dCard: "#31243F4D",
     bCard: "#31243F",
-    back: "#E1DFDF",
+    back: "#E1DFDF"
   },
   light: {
     bg: "#ECECEC",
@@ -18,7 +18,7 @@ export const colors: any = {
     shadowColor: "rgba(0, 0, 0, 0.6)",
     bio: "#FFF",
     dCard: "#FFF",
-    bCard: "#E4E4E43B",
-    back: "#848484",
-  },
+    bCard: "#E4E4E4",
+    back: "#848484"
+  }
 };

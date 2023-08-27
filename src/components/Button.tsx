@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 
 const Button = ({
   onPress,
@@ -28,18 +28,18 @@ export default Button;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
     padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 15
   },
   text: {
-    color: '#1F1F1F',
+    color: "#1F1F1F",
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    fontWeight: '600'
+    fontFamily: "Inter-Medium",
+    fontWeight: "600"
   },
   iconImage: {
     height: 15,

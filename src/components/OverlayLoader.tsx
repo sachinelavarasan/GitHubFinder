@@ -1,5 +1,5 @@
-import { Modal, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { Modal, StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const OverlayLoader = ({ isVisible }: { isVisible: boolean }) => {
   return (
@@ -20,19 +20,19 @@ export default OverlayLoader;
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(238,238,238,0.5)'
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(238,238,238,0.5)"
   },
   modalView: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
-    borderColor: '#000',
+    alignItems: "center",
+    borderColor: "#000",
     borderWidth: 1
   },
   modalText: {
-    textAlign: 'center'
+    textAlign: "center"
   }
 });

@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useContext } from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import { useContext } from "react";
 
-import { ThemeContext } from '../../../../utils/contexts/ThemeProvider';
+import { ThemeContext } from "../../../../utils/contexts/ThemeProvider";
 
-import DarkThemeLogo from '../../../../assets/logo/dark-logo.svg';
-import LightThemeLogo from '../../../../assets/logo/light-logo.svg';
-import { colors } from '../../../../utils/colors';
+import DarkThemeLogo from "../../../../assets/logo/dark-logo.svg";
+import LightThemeLogo from "../../../../assets/logo/light-logo.svg";
+import { colors } from "../../../../utils/colors";
 
 const Header = ({ title }: { title: string }) => {
   const { theme } = useContext(ThemeContext);
@@ -16,15 +16,15 @@ const Header = ({ title }: { title: string }) => {
     <>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           paddingHorizontal: 5,
           marginBottom: 10
         }}
       >
         <View style={{ marginRight: 4 }}>
-          {theme.mode === 'dark' ? <DarkThemeLogo /> : <LightThemeLogo />}
+          {theme.mode === "dark" ? <DarkThemeLogo /> : <LightThemeLogo />}
         </View>
       </View>
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
@@ -39,8 +39,8 @@ const makeStyles = (theme: any) =>
     header: {
       fontSize: 16,
       color: theme.primaryText,
-      fontFamily: 'Inter-Extra',
-      textTransform: 'capitalize',
+      fontFamily: "Inter-Extra",
+      textTransform: "capitalize",
       paddingBottom: 10
     }
   });

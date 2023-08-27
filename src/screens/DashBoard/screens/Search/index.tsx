@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext, useCallback } from 'react';
+import { useEffect, useMemo, useState, useContext, useCallback } from "react";
 import {
   Image,
   StyleSheet,
@@ -8,44 +8,39 @@ import {
   TouchableOpacity,
   Alert,
   FlatList
-} from 'react-native';
+} from "react-native";
 
-import Realm from 'realm';
+import { AxiosError, AxiosResponse } from "axios";
+import { StackScreenProps } from "@react-navigation/stack";
 
-import { AxiosError, AxiosResponse } from 'axios';
-import { StackScreenProps } from '@react-navigation/stack';
+import { fetchUsers } from "../../../../api/gitApi";
+import { SearchBar } from "../../../../components";
+import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
+import { colors } from "../../../../../utils/colors";
 
-import { fetchUsers } from '../../../../api/gitApi';
-import { SearchBar } from '../../../../components';
-import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
-import { colors } from '../../../../../utils/colors';
+import ArrowSvg from "../../../../../assets/icons/arrow-move.svg";
 
-import ArrowSvg from '../../../../../assets/icons/arrow-move.svg';
-
-import { BottomNavigatorParamList } from '..';
-import { HomeStackNavigatorParamList } from '../..';
-import Header from '../../components/Header';
-import { useRealm } from '../../../../models';
-import { SearchHistory } from '../../../../models/SearchHistory';
+import { BottomNavigatorParamList } from "..";
+import { HomeStackNavigatorParamList } from "../..";
+import Header from "../../components/Header";
 
 type Props = StackScreenProps<
   HomeStackNavigatorParamList & BottomNavigatorParamList,
-  'Search'
+  "Search"
 >;
 
 export default function SearchScreen({ navigation, route }: Props) {
   const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
-  const realm = useRealm();
 
   const [count, setCount] = useState(0);
-  const [results, setResults] = useState('');
+  const [results, setResults] = useState("");
   const [items, setItems] = useState<any>([]);
   const [currentItems, setCurrentItems] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [searchPhrase, setSearchPhrase] = useState('');
+  const [searchPhrase, setSearchPhrase] = useState("");
 
   const uniqueItems = useMemo(() => {
     let newElements = currentItems.filter((element: any) => {
@@ -72,7 +67,7 @@ export default function SearchScreen({ navigation, route }: Props) {
           setResults(
             data.total_count
               ? `${data.total_count.toString().padStart(2)} users found`
-              : 'No results found'
+              : "No results found"
           );
         })
         .catch((error: AxiosError) => {
@@ -84,18 +79,9 @@ export default function SearchScreen({ navigation, route }: Props) {
     }
   };
 
-  const handleSearchHistory = useCallback((): void => {
-    if (!searchPhrase) {
-      return;
-    }
-    realm.write(async () => {
-      realm.create('SearchHistory', SearchHistory.generate(searchPhrase));
-    });
-  }, [realm, searchPhrase]);
-
   const resetState = () => {
     setCurrentItems([]);
-    setResults('');
+    setResults("");
     setItems([]);
     setPage(1);
     setCount(0);
@@ -112,13 +98,13 @@ export default function SearchScreen({ navigation, route }: Props) {
         style={[styles.card, styles.shadow]}
         onPress={() => {
           /* 1. Navigate to the Details route with params */
-          navigation.navigate('Details', {
+          navigation.navigate("Details", {
             username: item?.login
           });
         }}
       >
         <View
-          style={{ flexDirection: 'row', alignItems: 'center', width: '80%' }}
+          style={{ flexDirection: "row", alignItems: "center", width: "80%" }}
         >
           <Image
             style={styles.avatarLogo}
@@ -151,17 +137,16 @@ export default function SearchScreen({ navigation, route }: Props) {
           }}
           onClick={(searchPhrase: string) => {
             resetState();
-            handleSearchHistory();
             fetchUserList(1, searchPhrase);
           }}
           onClose={() => {
-            setSearchPhrase('');
+            setSearchPhrase("");
             resetState();
           }}
         />
       </View>
       <Text style={[styles.header, { color: activeColors.primaryText }]}>
-        {searchPhrase.trim() ? results : ''}
+        {searchPhrase.trim() ? results : ""}
       </Text>
       <FlatList
         style={styles.cardContainer}
@@ -174,8 +159,8 @@ export default function SearchScreen({ navigation, route }: Props) {
             <View
               style={{
                 flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center'
+                alignItems: "center",
+                justifyContent: "center"
               }}
             >
               <ActivityIndicator size="large" color={activeColors.subText} />
@@ -183,9 +168,9 @@ export default function SearchScreen({ navigation, route }: Props) {
           ) : uniqueItems.length && count - page * 30 > 0 ? (
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center'
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
               }}
             >
               <TouchableOpacity
@@ -197,9 +182,9 @@ export default function SearchScreen({ navigation, route }: Props) {
                 style={{
                   borderColor: activeColors.subText,
                   borderWidth: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
                   padding: 7,
                   backgroundColor: activeColors.subText,
                   opacity: 0.8,
@@ -210,8 +195,8 @@ export default function SearchScreen({ navigation, route }: Props) {
               >
                 <Text
                   style={{
-                    color: 'white',
-                    textAlignVertical: 'center',
+                    color: "white",
+                    textAlignVertical: "center",
                     fontSize: 14
                   }}
                 >
@@ -250,7 +235,7 @@ const makeStyles = (theme: any) =>
       width: 50,
       height: 50,
       borderRadius: 50,
-      resizeMode: 'contain',
+      resizeMode: "contain",
       borderColor: theme.subText,
       borderWidth: 1
     },
@@ -259,10 +244,10 @@ const makeStyles = (theme: any) =>
     },
     text: {
       fontSize: 16,
-      fontStyle: 'normal',
+      fontStyle: "normal",
       color: theme.primaryText,
-      fontFamily: 'Inter-Bold',
-      textTransform: 'capitalize'
+      fontFamily: "Inter-Bold",
+      textTransform: "capitalize"
     },
     card: {
       backgroundColor: theme.cardBg,
@@ -271,9 +256,9 @@ const makeStyles = (theme: any) =>
       borderWidth: 1,
       borderColor: theme.cardBg,
       marginBottom: 10,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center'
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center"
     },
     shadow: {
       shadowColor: theme.shadowColor,
@@ -285,13 +270,13 @@ const makeStyles = (theme: any) =>
     subText: {
       color: theme.subText,
       fontSize: 12,
-      fontFamily: 'Inter-Normal'
+      fontFamily: "Inter-Normal"
     },
     header: {
       fontSize: 14,
       color: theme.primaryText,
-      fontFamily: 'Inter-Extra',
-      textTransform: 'capitalize',
+      fontFamily: "Inter-Extra",
+      textTransform: "capitalize",
       paddingVertical: 10
     }
   });

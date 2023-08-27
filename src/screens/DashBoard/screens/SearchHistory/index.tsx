@@ -1,20 +1,19 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
-import { useQuery } from '../../../../models';
-import { StackScreenProps } from '@react-navigation/stack';
-import { HomeStackNavigatorParamList } from '../..';
-import Header from '../../components/Header';
-import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
-import { colors } from '../../../../../utils/colors';
-import BackButton from '../../../../components/BackButton';
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
 
-type Props = StackScreenProps<HomeStackNavigatorParamList, 'SearchHistory'>;
+import { StackScreenProps } from "@react-navigation/stack";
+import { HomeStackNavigatorParamList } from "../..";
+import Header from "../../components/Header";
+import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
+import { colors } from "../../../../../utils/colors";
+import { BackButton } from "../../../../components";
+
+type Props = StackScreenProps<HomeStackNavigatorParamList, "SearchHistory">;
 
 const SearchHistory = ({ navigation }: Props) => {
   const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
-  const queryResult = useQuery('SearchHistory').sorted('createdAt', true);
 
   return (
     <View style={styles.container}>
@@ -26,7 +25,7 @@ const SearchHistory = ({ navigation }: Props) => {
       <Header title="Search History" />
       <FlatList
         style={styles.card}
-        data={queryResult}
+        data={[]}
         renderItem={({ item }: any) => {
           return (
             <View style={styles.item}>
@@ -66,6 +65,6 @@ const makeStyles = (theme: any) =>
     title: {
       fontSize: 16,
       color: theme.primaryText,
-      fontFamily: 'Inter-Medium'
+      fontFamily: "Inter-Medium"
     }
   });

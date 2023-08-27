@@ -1,21 +1,21 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useContext } from 'react';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useContext } from "react";
 
-import SearchScreen from './Search';
-import Favorites from './Favorites';
-import Settings from './Settings';
+import SearchScreen from "./Search";
+import Favorites from "./Favorites";
+import Settings from "./Settings";
 
-import Favorite from '../../../../assets/icons/Bookmark-light.svg';
-import Setting from '../../../../assets/icons/Setting-light.svg';
-import Search from '../../../../assets/icons/Search-light.svg';
+import Favorite from "../../../../assets/icons/Bookmark-light.svg";
+import Setting from "../../../../assets/icons/Setting-light.svg";
+import Search from "../../../../assets/icons/Search-light.svg";
 
-import SearchActive from '../../../../assets/icons/Search.svg';
-import FavoriteActive from '../../../../assets/icons/Bookmark-active.svg';
-import SettingActive from '../../../../assets/icons/Setting-active.svg';
-import { ThemeContext } from '../../../../utils/contexts/ThemeProvider';
-import { colors } from '../../../../utils/colors';
+import SearchActive from "../../../../assets/icons/Search.svg";
+import FavoriteActive from "../../../../assets/icons/Bookmark-active.svg";
+import SettingActive from "../../../../assets/icons/Setting-active.svg";
+import { ThemeContext } from "../../../../utils/contexts/ThemeProvider";
+import { colors } from "../../../../utils/colors";
 
 export type BottomNavigatorParamList = {
   Search: undefined;
@@ -26,24 +26,24 @@ export type BottomNavigatorParamList = {
 const Tab = createBottomTabNavigator<BottomNavigatorParamList>();
 
 const getIcons = (title: string, isActive: boolean) => {
-  const style: any = { alignSelf: 'center' };
+  const style: any = { alignSelf: "center" };
 
   switch (title) {
-    case 'Search':
+    case "Search":
       if (isActive) {
         return <SearchActive style={style} />;
       } else {
         return <Search style={style} />;
       }
 
-    case 'Favorites':
+    case "Favorites":
       if (isActive) {
         return <FavoriteActive style={style} />;
       } else {
         return <Favorite style={style} />;
       }
 
-    case 'Settings':
+    case "Settings":
       if (isActive) {
         return <SettingActive style={style} />;
       } else {
@@ -59,10 +59,10 @@ function MyTabBar({ state, descriptors, navigation }: any) {
   return (
     <View
       style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         elevation: 10,
         backgroundColor: activeColors.cardBg,
         paddingVertical: 10,
@@ -82,7 +82,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 
         const onPress = () => {
           const event = navigation.emit({
-            type: 'tabPress',
+            type: "tabPress",
             target: route.key
           });
 
@@ -93,7 +93,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 
         const onLongPress = () => {
           navigation.emit({
-            type: 'tabLongPress',
+            type: "tabLongPress",
             target: route.key
           });
         };
@@ -111,8 +111,8 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             {getIcons(label, isFocused)}
             <Text
               style={{
-                color: isFocused ? '#FF5C00' : '#B9BCBE',
-                fontFamily: 'Inter-Medium'
+                color: isFocused ? "#FF5C00" : "#B9BCBE",
+                fontFamily: "Inter-Medium"
               }}
             >
               {label}

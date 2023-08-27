@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
-    width: "100%",
+    width: "100%"
   },
   searchBar__unclicked: {
     padding: 10,
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 15,
     alignItems: "center",
+    elevation: 3
   },
   searchBar__clicked: {
     padding: 10,
@@ -118,17 +119,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "space-evenly",
+    elevation: 3
   },
   input: {
     fontSize: 20,
     marginLeft: 20,
-    width: "70%",
+    width: "70%"
   },
   actions: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginRight: 2,
+    marginRight: 2
   },
   check: {
     height: 25,
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#31243F",
     alignContent: "center",
     justifyContent: "center",
-    marginRight: 15,
+    marginRight: 15
   },
   close: {
     height: 25,
@@ -147,6 +149,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: "#6f4799",
     borderWidth: 1,
-    marginRight: 5,
-  },
+    marginRight: 5
+  }
 });
