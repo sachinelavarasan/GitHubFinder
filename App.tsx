@@ -1,7 +1,6 @@
 // In App.js in a new project
-
 import { useCallback, useState, useEffect } from 'react';
-import { View, StatusBar, Alert } from 'react-native';
+import { View, StatusBar, Text, LogBox } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -15,6 +14,10 @@ import Auth from './src/screens/Auth';
 import Login from './src/screens/Auth/screens/Login';
 import Register from './src/screens/Auth/screens/Register';
 import DashBoard from './src/screens/DashBoard';
+import { RealmProvider } from './src/models';
+import CommonModal from './src/components/CommonModal';
+// Ignore log notification by message
+LogBox.ignoreAllLogs();
 
 export type RootStackNavigatorParamList = {
   Auth: undefined;
@@ -27,6 +30,7 @@ const Stack = createStackNavigator<RootStackNavigatorParamList>();
 
 function App() {
   const [theme, setTheme] = useState({ mode: 'dark' });
+  const [isOnline, setIsOnline] = useState(true);
 
   const [fontsLoaded] = useFonts({
     'Inter-Black': require('./assets/fonts/Inter-Black.ttf'),
@@ -68,16 +72,14 @@ function App() {
     fetchSelectedTheme();
     // Subscribe
     const unsubscribe = NetInfo.addEventListener((state) => {
-      if (state.type === "cellular" || state.type === "wifi") {
+      if (state.type === 'cellular' || state.type === 'wifi') {
         if (!state.isConnected) {
-          Alert.alert(
-            "You are in Offline. Please, Check your network connection"
-          );
+          setIsOnline(true);
+        } else {
+          setIsOnline(false);
         }
       } else {
-        Alert.alert(
-          'You are in Offline. Please, Check your network connection'
-        );
+        setIsOnline(true);
       }
     });
     // Unsubscribe
@@ -90,22 +92,34 @@ function App() {
 
   return (
     <SafeAreaProvider>
-      <ThemeContext.Provider value={{ theme, updateTheme }}>
-        <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-          <StatusBar barStyle="dark-content" backgroundColor={'white'} />
-          <NavigationContainer>
-            <Stack.Navigator
-              initialRouteName="Auth"
-              screenOptions={{ headerShown: false }}
+      <RealmProvider fallback={() => null}>
+        <ThemeContext.Provider value={{ theme, updateTheme }}>
+          <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+            <CommonModal
+              isShow={isOnline}
+              onClose={() => {
+                setIsOnline(!isOnline);
+              }}
             >
-              <Stack.Screen name="Auth" component={Auth} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Register" component={Register} />
-              <Stack.Screen name="Dashboard" component={DashBoard} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </View>
-      </ThemeContext.Provider>
+              <Text style={{ fontFamily: 'Inter-Bold', fontSize: 16 }}>
+                You are in Offline. Please, Check your network connection
+              </Text>
+            </CommonModal>
+            <StatusBar barStyle="dark-content" backgroundColor={'white'} />
+            <NavigationContainer>
+              <Stack.Navigator
+                initialRouteName="Auth"
+                screenOptions={{ headerShown: false }}
+              >
+                <Stack.Screen name="Auth" component={Auth} />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="Dashboard" component={DashBoard} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </View>
+        </ThemeContext.Provider>
+      </RealmProvider>
     </SafeAreaProvider>
   );
 }

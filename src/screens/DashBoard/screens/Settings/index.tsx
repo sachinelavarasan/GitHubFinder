@@ -1,6 +1,8 @@
-import { StyleSheet, Switch, Text, View } from 'react-native';
-import { useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { useContext, useCallback } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
+import { CommonActions } from '@react-navigation/native';
 
 import { ThemeContext } from '../../../../../utils/contexts/ThemeProvider';
 import { colors } from '../../../../../utils/colors';
@@ -16,10 +18,25 @@ type Props = StackScreenProps<
   'Settings'
 >;
 
-const Settings = ({ route }: Props) => {
+const Settings = ({ route, navigation }: Props) => {
   const { theme, updateTheme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
+
+  const logOut = useCallback(async () => {
+    try {
+      await AsyncStorage.removeItem('@token');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Login' }]
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Header title={route.name} />
@@ -30,7 +47,8 @@ const Settings = ({ route }: Props) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottomWidth: 1,
-          borderBottomColor: activeColors.bCard
+          borderBottomColor: activeColors.bCard,
+          paddingBottom: 15
         }}
       >
         <Text style={[styles.subheader, { color: activeColors.primaryText }]}>
@@ -56,6 +74,40 @@ const Settings = ({ route }: Props) => {
           />
         </View>
       </View>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottomWidth: 1,
+          borderBottomColor: activeColors.bCard,
+          paddingVertical: 15
+        }}
+        onPress={() => {
+          navigation.navigate('SearchHistory');
+        }}
+      >
+        <Text style={[styles.subheader, { color: activeColors.primaryText }]}>
+          Search History
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottomWidth: 1,
+          borderBottomColor: activeColors.bCard,
+          paddingVertical: 15
+        }}
+        onPress={() => {
+          logOut();
+        }}
+      >
+        <Text style={[styles.subheader, { color: activeColors.primaryText }]}>
+          Logout
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -80,7 +132,7 @@ const makeStyles = (theme: any) =>
     subheader: {
       fontSize: 14,
       color: theme.primaryText,
-      fontFamily: 'Inter-Medium',
+      fontFamily: 'Inter-Bold',
       textTransform: 'capitalize',
       paddingVertical: 8
     }

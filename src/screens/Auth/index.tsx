@@ -2,10 +2,11 @@ import React, { useCallback, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { StackNavigatorParamList } from '../../../App';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
-type authScreenProp = StackNavigationProp<StackNavigatorParamList>;
+import { RootStackNavigatorParamList } from '../../../App';
+
+type authScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
 
 const Auth = () => {
   const navigation = useNavigation<authScreenProp>();

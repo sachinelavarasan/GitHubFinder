@@ -20,6 +20,7 @@ import GithubDark from '../../../../../../assets/icons/github-dark.svg';
 import GithubLight from '../../../../../../assets/icons/github-light.svg';
 import WebDark from '../../../../../../assets/icons/web-dark.svg';
 import WebLight from '../../../../../../assets/icons/web-light.svg';
+import BackButton from '../../../../../components/BackButton';
 
 const windowDimensions = Dimensions.get('window').width - 40;
 
@@ -46,6 +47,11 @@ const Header = ({ user }: any) => {
     <View style={{ flex: 1, width: windowDimensions }}>
       <View style={styles.headerContainer}>
         <View style={{ width: windowDimensions / 2 }}>
+          <BackButton
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
           {user?.name ? <Text style={styles.head}>{user?.name}</Text> : null}
           {user?.blog ? (
             <TouchableOpacity
@@ -96,28 +102,6 @@ const Header = ({ user }: any) => {
           }}
         />
       </View>
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          {theme.mode === 'dark' ? <BackDark /> : <BackLight />}
-          <Text style={styles.back}>Back</Text>
-        </View>
-      </TouchableOpacity>
 
       <View style={{ flexDirection: 'column', marginTop: 10 }}>
         <Text style={styles.bio}>BIO</Text>
