@@ -10,9 +10,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions,
+  ImageBackground
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { AxiosResponse } from "axios";
 
 import AuthLink from "../../components/AuthLink";
 import Input from "../../../../components/Input";
@@ -21,12 +24,13 @@ import Spacer from "../../../../components/Spacer";
 import { isEmail } from "../../../../../utils/validation";
 import { RootStackNavigatorParamList } from "../../../../../App";
 import { login } from "../../../../api/api";
-import { AxiosResponse } from "axios";
+
+import GoIcon from "../../../../../assets/icons/Button-go.svg";
 
 type StateType = string | undefined;
 
 type loginScreenProp = StackNavigationProp<RootStackNavigatorParamList>;
-
+const windowDimensions = Dimensions.get("window").width;
 const Login = () => {
   const navigation = useNavigation<loginScreenProp>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -81,7 +85,7 @@ const Login = () => {
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === "ios" ? { behavior: "padding" } : {})}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: "#10061C" }}
     >
       <ScrollView
         bounces={false}
@@ -89,23 +93,26 @@ const Login = () => {
         contentContainerStyle={{ flex: 1 }}
         keyboardShouldPersistTaps={"always"}
       >
+        <ImageBackground
+          source={require("../../../../../assets/AppAuthBackground/Background.png")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.header}>
+            <Text style={styles.helloText}>Hello,</Text>
+            <Text style={styles.welcomeText}>Welcome Back</Text>
+          </View>
+        </ImageBackground>
+
         <View style={styles.container}>
           <View style={styles.formContainer}>
-            <View style={styles.imageContainer}>
-              <Image
-                source={require("../../../../../assets/app-icon.png")}
-                style={styles.image}
-                resizeMode="contain"
-              />
-            </View>
-
             <View style={styles.errorContainer}>
               {isAuthError ? (
                 <Text style={styles.error}>{isAuthError}</Text>
               ) : null}
             </View>
             <View style={styles.loginContainer}>
-              <Spacer height={25} />
+              {/* <Spacer height={10} /> */}
               <Input
                 value={email}
                 placeholder="Enter Email"
@@ -118,8 +125,15 @@ const Login = () => {
                   setEmail(text);
                 }}
                 error={errors.email}
+                borderBottom
+                labelStyle={{
+                  color: "#FF5C00",
+                  padding: 6,
+                  fontSize: 18,
+                  fontFamilt: "Inter-Bold"
+                }}
               />
-              <Spacer height={20} />
+              <Spacer height={15} />
               <Input
                 value={password}
                 placeholder="Enter password"
@@ -131,9 +145,17 @@ const Login = () => {
                   setPassword(text);
                 }}
                 error={errors.password}
+                borderBottom
+                labelStyle={{
+                  color: "#FF5C00",
+                  padding: 6,
+                  fontSize: 18,
+                  fontFamilt: "Inter-Bold"
+                }}
               />
-              <Spacer height={50} />
+              <Spacer height={15} />
               <View style={styles.btnContainer}>
+                <Text style={styles.buttonText}>Sign In</Text>
                 <TouchableOpacity
                   style={[styles.button, isLoading ? styles.disable : {}]}
                   onPress={() => {
@@ -148,18 +170,14 @@ const Login = () => {
                       color={"#fff"}
                       style={styles.loader}
                     />
-                  ) : null}
-                  <Text
-                    style={[styles.title, isLoading ? styles.textDisable : {}]}
-                  >
-                    Sign In
-                  </Text>
+                  ) : (
+                    <GoIcon />
+                  )}
                 </TouchableOpacity>
               </View>
-              <Spacer height={50} />
+              <Spacer height={20} />
               <AuthLink
-                linkText="Register"
-                description="Dont have an account ?"
+                linkText="Sign Up Here"
                 onPress={() => {
                   navigation.navigate("Register");
                 }}
@@ -175,36 +193,31 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  },
-  imageContainer: {
-    justifyContent: "center",
-    alignItems: "center"
+    flex: 1
   },
   loginContainer: {
     justifyContent: "center",
     paddingHorizontal: 35
   },
   image: {
-    height: 150,
-    width: 150
+    flex: 1,
+    justifyContent: "center"
   },
   formContainer: {
     flex: 1,
     justifyContent: "center"
   },
   btnContainer: {
-    alignItems: "center"
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 8,
+    paddingVertical: 15
   },
   button: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#000",
-    borderRadius: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 25
+    justifyContent: "center"
   },
   loader: {
     position: "absolute",
@@ -230,7 +243,20 @@ const styles = StyleSheet.create({
     color: "red",
     fontFamily: "Inter-Medium",
     paddingHorizontal: 35
-  }
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    width: "100%",
+    paddingHorizontal: 56
+  },
+  helloText: { color: "#000", fontFamily: "Inter-Medium", fontSize: 44 },
+  welcomeText: { color: "#000", fontFamily: "Inter-Normal", fontSize: 36 },
+  buttonText: { color: "#fff", fontFamily: "Inter-Bold", fontSize: 18 }
 });
 
 export default Login;
