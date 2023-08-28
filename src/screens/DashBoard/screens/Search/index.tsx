@@ -23,6 +23,7 @@ import ArrowSvg from "../../../../../assets/icons/arrow-move.svg";
 import { BottomNavigatorParamList } from "..";
 import { HomeStackNavigatorParamList } from "../..";
 import Header from "../../components/Header";
+import { storeSearchData } from "../../../../../utils/asyncStorage";
 
 type Props = StackScreenProps<
   HomeStackNavigatorParamList & BottomNavigatorParamList,
@@ -135,9 +136,12 @@ export default function SearchScreen({ navigation, route }: Props) {
           onChange={(e: any) => {
             setSearchPhrase(e);
           }}
-          onClick={(searchPhrase: string) => {
+          onClick={async (searchPhrase: string) => {
             resetState();
-            fetchUserList(1, searchPhrase);
+            if (searchPhrase.trim().length) {
+              fetchUserList(1, searchPhrase);
+              await storeSearchData(searchPhrase);
+            }
           }}
           onClose={() => {
             setSearchPhrase("");

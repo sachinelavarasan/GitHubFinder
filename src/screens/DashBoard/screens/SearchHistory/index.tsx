@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { HomeStackNavigatorParamList } from "../..";
@@ -7,6 +7,7 @@ import Header from "../../components/Header";
 import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
 import { colors } from "../../../../../utils/colors";
 import { BackButton } from "../../../../components";
+import { getSearchData } from "../../../../../utils/asyncStorage";
 
 type Props = StackScreenProps<HomeStackNavigatorParamList, "SearchHistory">;
 
@@ -14,6 +15,17 @@ const SearchHistory = ({ navigation }: Props) => {
   const { theme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    getSearchData()
+      .then((data) => {
+        setHistory(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -25,15 +37,15 @@ const SearchHistory = ({ navigation }: Props) => {
       <Header title="Search History" />
       <FlatList
         style={styles.card}
-        data={[]}
+        data={history}
         renderItem={({ item }: any) => {
           return (
             <View style={styles.item}>
-              <Text style={styles.title}>{item.shWord}</Text>
+              <Text style={styles.title}>{item}</Text>
             </View>
           );
         }}
-        keyExtractor={(item: any) => item.shId}
+        keyExtractor={(item: any, index: number) => item + index}
       />
     </View>
   );

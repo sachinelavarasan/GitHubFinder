@@ -42,14 +42,14 @@ function App() {
     "Inter-Extra": require("./assets/fonts/Inter-ExtraBold.ttf")
   });
 
-  const updateTheme = (newTheme: any) => {
+  const updateTheme = async (newTheme: any) => {
     let mode;
     if (!newTheme) {
       mode = theme.mode === "dark" ? "light" : "dark";
       newTheme = { mode };
     }
     setTheme(newTheme);
-    storeData("appTheme", newTheme);
+    await storeData("appTheme", newTheme);
   };
 
   const fetchSelectedTheme = async () => {
