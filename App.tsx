@@ -42,6 +42,10 @@ function App() {
     "Inter-Extra": require("./assets/fonts/Inter-ExtraBold.ttf")
   });
 
+  // useEffect(() => {
+  //  storeData("@token","safjksaflsdjfj");
+  // }, []);
+
   const updateTheme = async (newTheme: any) => {
     let mode;
     if (!newTheme) {

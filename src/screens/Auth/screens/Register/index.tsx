@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
@@ -10,7 +9,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Text
+  Text,
+  ImageBackground
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -20,6 +20,8 @@ import Spacer from "../../../../components/Spacer";
 import { register } from "../../../../api/api";
 import { isEmail } from "../../../../../utils/validation";
 import { RootStackNavigatorParamList } from "../../../../../App";
+
+import GoIcon from "../../../../../assets/icons/Button-go.svg";
 
 type StateType = string;
 
@@ -79,7 +81,7 @@ const Register = () => {
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === "ios" ? { behavior: "padding" } : {})}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: "#10061C" }}
     >
       <ScrollView
         bounces={false}
@@ -87,15 +89,17 @@ const Register = () => {
         contentContainerStyle={{ flex: 1 }}
         keyboardShouldPersistTaps={"always"}
       >
+        <ImageBackground
+          source={require("../../../../../assets/AppAuthBackground/Background.png")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.header}>
+            <Text style={styles.text}>Create Account</Text>
+          </View>
+        </ImageBackground>
         <View style={styles.container}>
           <View style={styles.formContainer}>
-            <View style={styles.imageContainer}>
-              <Image
-                source={require("../../../../../assets/app-icon.png")}
-                style={styles.image}
-                resizeMode="contain"
-              />
-            </View>
             <View style={styles.errorContainer}>
               {isAuthError ? (
                 <Text style={styles.error}>{isAuthError}</Text>
@@ -103,6 +107,25 @@ const Register = () => {
             </View>
             <Spacer height={25} />
             <View style={styles.loginContainer}>
+              <Input
+                value={name}
+                placeholder="Enter Name"
+                label="Name"
+                autoCapitalize="none"
+                onChangeText={(text) => {
+                  setErrors({ email: "", password: "", name: "" });
+                  setName(text);
+                }}
+                error={errors.name}
+                borderBottom
+                labelStyle={{
+                  color: "#FF5C00",
+                  padding: 6,
+                  fontSize: 18,
+                  fontFamilt: "Inter-Bold"
+                }}
+              />
+              <Spacer height={15} />
               <Input
                 value={email}
                 placeholder="Enter Email"
@@ -115,8 +138,15 @@ const Register = () => {
                   setEmail(text);
                 }}
                 error={errors.email}
+                borderBottom
+                labelStyle={{
+                  color: "#FF5C00",
+                  padding: 5,
+                  fontSize: 18,
+                  fontFamilt: "Inter-Bold"
+                }}
               />
-              <Spacer height={20} />
+              <Spacer height={15} />
               <Input
                 value={password}
                 placeholder="Enter password"
@@ -128,22 +158,18 @@ const Register = () => {
                   setPassword(text);
                 }}
                 error={errors.password}
-              />
-              <Spacer height={20} />
-              <Input
-                value={name}
-                placeholder="Enter Name"
-                label="Name"
-                autoCapitalize="none"
-                isPassword
-                onChangeText={(text) => {
-                  setErrors({ email: "", password: "", name: "" });
-                  setName(text);
+                borderBottom
+                labelStyle={{
+                  color: "#FF5C00",
+                  padding: 6,
+                  fontSize: 18,
+                  fontFamilt: "Inter-Bold"
                 }}
-                error={errors.name}
               />
-              <Spacer height={50} />
+              <Spacer height={15} />
+
               <View style={styles.btnContainer}>
+                <Text style={styles.buttonText}>Sign Up</Text>
                 <TouchableOpacity
                   style={[styles.button, isLoading ? styles.disable : {}]}
                   onPress={() => {
@@ -158,23 +184,19 @@ const Register = () => {
                       color={"#fff"}
                       style={styles.loader}
                     />
-                  ) : null}
-                  <Text
-                    style={[styles.title, isLoading ? styles.textDisable : {}]}
-                  >
-                    Sign Up
-                  </Text>
+                  ) : (
+                    <GoIcon />
+                  )}
                 </TouchableOpacity>
               </View>
-              <Spacer height={50} />
+              <Spacer height={20} />
               <AuthLink
-                linkText="Sign In"
-                description="Already have an account ?"
+                linkText="Sign In Here"
                 onPress={() => {
                   navigation.navigate("Login");
                 }}
               />
-              <Spacer height={50} />
+              {/* <Spacer height={50} /> */}
             </View>
           </View>
         </View>
@@ -186,15 +208,11 @@ const Register = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  },
-  imageContainer: {
-    justifyContent: "center",
-    alignItems: "center"
+    top: -50
   },
   image: {
-    height: 150,
-    width: 150
+    flex: 1,
+    justifyContent: "center"
   },
   loginContainer: {
     justifyContent: "center",
@@ -205,16 +223,16 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   btnContainer: {
-    alignItems: "center"
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 8,
+    paddingVertical: 15
   },
   button: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#000",
-    borderRadius: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 25
+    justifyContent: "center"
   },
   loader: {
     position: "absolute",
@@ -240,7 +258,19 @@ const styles = StyleSheet.create({
     color: "red",
     fontFamily: "Inter-Medium",
     paddingHorizontal: 35
-  }
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    width: "100%",
+    paddingHorizontal: 56
+  },
+  text: { color: "#000", fontFamily: "Inter-Medium", fontSize: 44 },
+  buttonText: { color: "#fff", fontFamily: "Inter-Bold", fontSize: 18 }
 });
 
 export default Register;

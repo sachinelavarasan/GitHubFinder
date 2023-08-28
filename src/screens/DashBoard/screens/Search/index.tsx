@@ -72,6 +72,7 @@ export default function SearchScreen({ navigation, route }: Props) {
           );
         })
         .catch((error: AxiosError) => {
+          console.log(error,JSON.stringify(error.response))
           Alert.alert(JSON.stringify(error.response?.data));
         })
         .finally(() => {
