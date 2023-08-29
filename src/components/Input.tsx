@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -33,6 +33,20 @@ const Input: React.FC<ExtraInputProps & TextInputProps> = ({
   ...props
 }) => {
   const [show, setShow] = useState(false);
+  const inputRef = useRef<View | null>(null);
+
+  const handleFocus = () => {
+    inputRef?.current?.setNativeProps({
+      style: styles.focusedInput
+    });
+  };
+
+  const handleBlur = () => {
+    inputRef?.current?.setNativeProps({
+      style: styles.blurredInput
+    });
+  };
+
   return (
     <View>
       {label ? (
@@ -41,6 +55,7 @@ const Input: React.FC<ExtraInputProps & TextInputProps> = ({
         </Text>
       ) : null}
       <View
+        ref={inputRef}
         style={[
           styles.inputContainer,
           borderBottom ? styles.borderBottom : null
@@ -61,8 +76,11 @@ const Input: React.FC<ExtraInputProps & TextInputProps> = ({
             selectTextOnFocus={false}
             autoCapitalize="none"
             spellCheck={false}
-            placeholderTextColor={"#999999"}
+            placeholderTextColor={"#ffffffad"}
             selectionColor="#000"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onEndEditing={handleBlur}
           />
           {isPassword ? (
             <TouchableOpacity
@@ -84,7 +102,7 @@ export default Input;
 const styles = StyleSheet.create({
   inputContainer: {
     borderColor: "#F2F2F2",
-    borderRadius: 10,
+    borderRadius: 4,
     borderWidth: 1,
     marginBottom: 0
   },
@@ -101,12 +119,12 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 0,
-    paddingVertical: 12,
+    paddingVertical: 6,
     fontSize: 14,
     fontWeight: "600",
     fontFamily: "Inter-Medium",
-    color: "#000",
-    paddingHorizontal: 24
+    color: "#fff",
+    paddingHorizontal: 20
   },
   label: {
     fontSize: 14,
@@ -120,7 +138,8 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 3,
     position: "absolute",
-    marginTop: 70
+    marginTop: 80,
+    marginLeft: 5
   },
   inputIconPassword: {
     height: 20,
@@ -134,5 +153,11 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 15,
     fontWeight: "900"
+  },
+  focusedInput: {
+    borderColor: "#FF5C00" // Change to the color you want for focused state
+  },
+  blurredInput: {
+    borderColor: "#F2F2F2" // Change to the color you want for blurred state
   }
 });

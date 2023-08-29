@@ -95,14 +95,9 @@ const Login = () => {
       >
         <ImageBackground
           source={require("../../../../../assets/AppAuthBackground/Background.png")}
-          resizeMode="cover"
+          resizeMode="contain"
           style={styles.image}
-        >
-          <View style={styles.header}>
-            <Text style={styles.helloText}>Hello,</Text>
-            <Text style={styles.welcomeText}>Welcome Back</Text>
-          </View>
-        </ImageBackground>
+        />
 
         <View style={styles.container}>
           <View style={styles.formContainer}>
@@ -112,7 +107,10 @@ const Login = () => {
               ) : null}
             </View>
             <View style={styles.loginContainer}>
-              {/* <Spacer height={10} /> */}
+              <View>
+                <Text style={styles.helloText}>Hello,</Text>
+                <Text style={styles.welcomeText}>Welcome Back</Text>
+              </View>
               <Input
                 value={email}
                 placeholder="Enter Email"
@@ -130,7 +128,7 @@ const Login = () => {
                   color: "#FF5C00",
                   padding: 6,
                   fontSize: 18,
-                  fontFamilt: "Inter-Bold"
+                  fontFamily: "Inter-Bold"
                 }}
               />
               <Spacer height={15} />
@@ -150,7 +148,7 @@ const Login = () => {
                   color: "#FF5C00",
                   padding: 6,
                   fontSize: 18,
-                  fontFamilt: "Inter-Bold"
+                  fontFamily: "Inter-Bold"
                 }}
               />
               <Spacer height={15} />
@@ -182,7 +180,7 @@ const Login = () => {
                   navigation.navigate("Register");
                 }}
               />
-              <Spacer height={50} />
+              <Spacer height={20} />
             </View>
           </View>
         </View>
@@ -193,18 +191,23 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  },
-  loginContainer: {
-    justifyContent: "center",
-    paddingHorizontal: 35
-  },
-  image: {
     flex: 1,
+    paddingHorizontal: 35,
     justifyContent: "center"
   },
+  image: {
+    position: "absolute",
+    top: -200,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  loginContainer: {
+    backgroundColor: "#69585839",
+    padding: 15,
+    borderRadius: 10
+  },
   formContainer: {
-    flex: 1,
     justifyContent: "center"
   },
   btnContainer: {
@@ -244,18 +247,8 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     paddingHorizontal: 35
   },
-  header: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    width: "100%",
-    paddingHorizontal: 56
-  },
-  helloText: { color: "#000", fontFamily: "Inter-Medium", fontSize: 44 },
-  welcomeText: { color: "#000", fontFamily: "Inter-Normal", fontSize: 36 },
+  helloText: { color: "#000", fontFamily: "Inter-Medium", fontSize: 36 },
+  welcomeText: { color: "#000", fontFamily: "Inter-Normal", fontSize: 30 },
   buttonText: { color: "#fff", fontFamily: "Inter-Bold", fontSize: 18 }
 });
 

@@ -28,6 +28,8 @@ const Settings = ({ route, navigation }: Props) => {
   const logOut = useCallback(async () => {
     try {
       await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem("appTheme");
+      await AsyncStorage.removeItem("@searchWords");
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

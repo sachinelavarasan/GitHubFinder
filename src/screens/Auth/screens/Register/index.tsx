@@ -91,13 +91,9 @@ const Register = () => {
       >
         <ImageBackground
           source={require("../../../../../assets/AppAuthBackground/Background.png")}
-          resizeMode="cover"
+          resizeMode="contain"
           style={styles.image}
-        >
-          <View style={styles.header}>
-            <Text style={styles.text}>Create Account</Text>
-          </View>
-        </ImageBackground>
+        />
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <View style={styles.errorContainer}>
@@ -105,8 +101,10 @@ const Register = () => {
                 <Text style={styles.error}>{isAuthError}</Text>
               ) : null}
             </View>
-            <Spacer height={25} />
             <View style={styles.loginContainer}>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={styles.text}>Create Account</Text>
+              </View>
               <Input
                 value={name}
                 placeholder="Enter Name"
@@ -122,7 +120,7 @@ const Register = () => {
                   color: "#FF5C00",
                   padding: 6,
                   fontSize: 18,
-                  fontFamilt: "Inter-Bold"
+                  fontFamily: "Inter-Bold"
                 }}
               />
               <Spacer height={15} />
@@ -143,7 +141,7 @@ const Register = () => {
                   color: "#FF5C00",
                   padding: 5,
                   fontSize: 18,
-                  fontFamilt: "Inter-Bold"
+                  fontFamily: "Inter-Bold"
                 }}
               />
               <Spacer height={15} />
@@ -163,10 +161,10 @@ const Register = () => {
                   color: "#FF5C00",
                   padding: 6,
                   fontSize: 18,
-                  fontFamilt: "Inter-Bold"
+                  fontFamily: "Inter-Bold"
                 }}
               />
-              <Spacer height={15} />
+              <Spacer height={10} />
 
               <View style={styles.btnContainer}>
                 <Text style={styles.buttonText}>Sign Up</Text>
@@ -196,7 +194,7 @@ const Register = () => {
                   navigation.navigate("Login");
                 }}
               />
-              {/* <Spacer height={50} /> */}
+              <Spacer height={20} />
             </View>
           </View>
         </View>
@@ -208,18 +206,22 @@ const Register = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    top: -50
-  },
-  image: {
-    flex: 1,
+    paddingHorizontal: 35,
     justifyContent: "center"
   },
+  image: {
+    position: "absolute",
+    top: -200,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
   loginContainer: {
-    justifyContent: "center",
-    paddingHorizontal: 35
+    backgroundColor: "#69585839",
+    padding: 15,
+    borderRadius: 10
   },
   formContainer: {
-    flex: 1,
     justifyContent: "center"
   },
   btnContainer: {
@@ -259,17 +261,8 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     paddingHorizontal: 35
   },
-  header: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    width: "100%",
-    paddingHorizontal: 56
-  },
-  text: { color: "#000", fontFamily: "Inter-Medium", fontSize: 44 },
+
+  text: { color: "#000", fontFamily: "Inter-Medium", fontSize: 30 },
   buttonText: { color: "#fff", fontFamily: "Inter-Bold", fontSize: 18 }
 });
 
