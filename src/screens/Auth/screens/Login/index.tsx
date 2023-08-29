@@ -95,7 +95,7 @@ const Login = () => {
       >
         <ImageBackground
           source={require("../../../../../assets/AppAuthBackground/Background.png")}
-          resizeMode="contain"
+          // resizeMode="contain"
           style={styles.image}
         />
 
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: "absolute",
-    top: -200,
+    top: 0,
     left: 0,
     right: 0,
     bottom: 0
