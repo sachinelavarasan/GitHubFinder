@@ -4,15 +4,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useContext } from "react";
 
 import SearchScreen from "./Search";
-import Favorites from "./Favorites";
 import Settings from "./Settings";
 
-import Favorite from "../../../../assets/icons/Bookmark-light.svg";
 import Setting from "../../../../assets/icons/Setting-light.svg";
 import Search from "../../../../assets/icons/Search-light.svg";
 
 import SearchActive from "../../../../assets/icons/Search.svg";
-import FavoriteActive from "../../../../assets/icons/Bookmark-active.svg";
 import SettingActive from "../../../../assets/icons/Setting-active.svg";
 import { ThemeContext } from "../../../../utils/contexts/ThemeProvider";
 import { colors } from "../../../../utils/colors";
@@ -36,13 +33,6 @@ const getIcons = (title: string, isActive: boolean) => {
         return <Search style={style} />;
       }
 
-    case "Favorites":
-      if (isActive) {
-        return <FavoriteActive style={style} />;
-      } else {
-        return <Favorite style={style} />;
-      }
-
     case "Settings":
       if (isActive) {
         return <SettingActive style={style} />;
@@ -61,7 +51,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
       style={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         alignItems: "center",
         elevation: 10,
         backgroundColor: activeColors.cardBg,
@@ -107,6 +97,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             onPress={onPress}
             onLongPress={onLongPress}
             key={route.key}
+            style={{ paddingHorizontal: 50 }}
           >
             {getIcons(label, isFocused)}
             <Text
@@ -133,7 +124,6 @@ export default function Home() {
       tabBar={(props) => <MyTabBar {...props} />}
     >
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Favorites" component={Favorites} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
   );
