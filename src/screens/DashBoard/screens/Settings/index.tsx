@@ -1,8 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
-import { useContext, useCallback } from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import { useContext, useCallback, useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useFocusEffect } from "@react-navigation/native";
 
 import { ThemeContext } from "../../../../../utils/contexts/ThemeProvider";
 import { colors } from "../../../../../utils/colors";
@@ -14,6 +21,7 @@ import Logout from "../../../../../assets/icons/logout.svg";
 import Header from "../../components/Header";
 import { BottomNavigatorParamList } from "..";
 import { HomeStackNavigatorParamList } from "../..";
+import { getData } from "../../../../../utils/asyncStorage";
 
 type Props = StackScreenProps<
   HomeStackNavigatorParamList & BottomNavigatorParamList,
@@ -21,6 +29,7 @@ type Props = StackScreenProps<
 >;
 
 const Settings = ({ route, navigation }: Props) => {
+  const [user, setUser] = useState<any>(null);
   const { theme, updateTheme } = useContext(ThemeContext);
   const activeColors = colors[theme.mode];
   const styles = makeStyles(activeColors);
@@ -40,6 +49,23 @@ const Settings = ({ route, navigation }: Props) => {
       console.log(e);
     }
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUser = async () => {
+        try {
+          const user = await getData("@user");
+          setUser(user);
+        } catch (e) {
+          // Handle error
+        }
+      };
+      fetchUser();
+      return () => {
+        fetchUser();
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -76,6 +102,29 @@ const Settings = ({ route, navigation }: Props) => {
             }}
             value={theme.mode === "dark"}
           />
+        </View>
+      </View>
+      <View
+        style={{ borderBottomColor: activeColors.bCard, borderBottomWidth: 1 }}
+      >
+        <Text style={[styles.subheader, { color: activeColors.primaryText }]}>
+          Profile Details
+        </Text>
+        <View
+          style={{
+            flexDirection: "row"
+          }}
+        >
+          <Text style={styles.col}>Name</Text>
+          <Text style={styles.cell}>{user?.name}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row"
+          }}
+        >
+          <Text style={styles.col}>Email</Text>
+          <Text style={styles.cell}>{user?.email}</Text>
         </View>
       </View>
       <TouchableOpacity
@@ -139,5 +188,21 @@ const makeStyles = (theme: any) =>
       fontFamily: "Inter-Bold",
       textTransform: "capitalize",
       paddingVertical: 8
+    },
+    col: {
+      width: 100,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      color: theme.primaryText,
+      fontSize: 14,
+      fontFamily: "Inter-Medium"
+    },
+    cell: {
+      width: 200,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      color: theme.subText,
+      fontSize: 14,
+      fontFamily: "Inter-Medium"
     }
   });
